@@ -8,6 +8,8 @@ using namespace std;
 
 template <typename T = int>
 class Node {
+friend class Graph;
+
 public:
     //CONSTRUCTORS
     Node();
@@ -17,21 +19,29 @@ public:
     //ACCESSORS
     int get_id() const;
     virtual size_t degree() const = 0;
+    bool has_self_loop() const;
+    bool marked() const;
 
 protected:
     //MUTATORS
     virtual bool insert_neighbor(Node<T> &node) = 0;
     virtual bool erase_neighbor(Node<T> &node) = 0;
+    virtual void set_self_loop(bool loop) = 0;
+    void set_marker(bool new_marker);
 
     //MEMBER VARIABLES
     int id;
     int capacity;
+    bool self_loop;
+    bool marker;
     T val;
 
 };
 
 template <typename T = int>
 class SimpleNode : public Node<T> {
+friend class Graph;
+
 public:
     //CONSTRUCTORS
     SimpleNode();
@@ -46,6 +56,7 @@ private:
     //MUTATORS
     bool insert_neighbor(Node<T> &node);
     bool erase_neighbor(Node<T> &node);
+    void set_self_loop(bool loop);
 
     //MEMBER VARIABLES
     unordered_set<SimpleNode<T>*> neighbors;
@@ -54,6 +65,8 @@ private:
 
 template <typename T = int>
 class DirectedNode : public Node<T> {
+friend class Graph;
+
 public:
     //CONSTRUCTORS
     DirectedNode();
@@ -73,6 +86,7 @@ private:
     bool insert_out_neighbor(Node<T> &node);
     bool erase_in_neighbor(Node<T> &node);
     bool erase_out_neighbor(Node<T> &node);
+    void set_self_loop(bool loop);
 
     //MEMBER VARIABLES
     unordered_set<DirectedNode<T>*> in_neighbors;
