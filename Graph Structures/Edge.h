@@ -1,6 +1,6 @@
 
 #pragma once
-#include "Node.h"
+#include "Vertex.h"
 #include <iostream>
 #include <optional>
 using namespace std;
@@ -10,35 +10,42 @@ using namespace std;
 
 //FORWARD DECLARATION
 template <typename T>
-class Node;
+class Graph;
+
+template <typename T>
+class Vertex;
 
 template <typename T = int>
 class Edge {
-friend class Graph;
+friend class Graph<T>;
 
 public:
     //CONSTRUCTORS
-    Edge(Node<T> &new_node1, Node<T> &new_node2);
-    Edge(Node<T> &new_node1, Node<T> &new_node2, bool new_directed);
-    Edge(Node<T> &new_node1, Node<T> &new_node2, bool new_directed, double new_weight);
+    Edge(const Vertex<T> &new_vertex1, const Vertex<T> &new_vertex2);
+    Edge(const Vertex<T> &new_vertex1, const Vertex<T> &new_vertex2, bool new_directed);
+    Edge(const Vertex<T> &new_vertex1, const Vertex<T> &new_vertex2, bool new_directed, double new_weight);
+    Edge(const Edge<T> &other_edge);
+
+    //DESTRUCTORS
+    ~Edge();
 
     //ACCESSORS
-    Node<T>& first() const;
-    Node<T>& second() const;
+    Vertex<T>& first() const;
+    Vertex<T>& second() const;
     bool isDirected() const;
     bool isWeighted() const;
     bool getWeight() const;
 
 private:
     //MUTATORS
-    void setFirst(Node<T> &new_node1);
-    void setSecond(Node<T> &new_node2);
+    void setFirst(Vertex<T> &new_vertex1);
+    void setSecond(Vertex<T> &new_vertex2);
     void setDirected(bool new_directed);
     void setWeight(double new_weight);
 
     //MEMBER VARIABLES
-    Node<T> &node1;
-    Node<T> &node2;
+    Vertex<T> &v1;
+    Vertex<T> &v2;
     bool directed;
     optional<double> weight;
 
