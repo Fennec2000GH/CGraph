@@ -1,5 +1,5 @@
 
-#define DefaultEdgeWeight 1
+#pragma once
 #include "Node.h"
 #include <iostream>
 #include <optional>
@@ -7,6 +7,10 @@ using namespace std;
 
 #ifndef CGRAPH_EDGE_H
 #define CGRAPH_EDGE_H
+
+//FORWARD DECLARATION
+template <typename T>
+class Node;
 
 template <typename T = int>
 class Edge {

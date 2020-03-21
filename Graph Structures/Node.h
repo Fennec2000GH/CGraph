@@ -1,10 +1,18 @@
 
+#pragma once
+#include "Edge.h"
+#include <algorithm>
+#include <optional>
 #include <unordered_set>
 #include <vector>
 using namespace std;
 
 #ifndef CGRAPH_NODE_H
 #define CGRAPH_NODE_H
+
+//FORWARD DECLARATION
+template <typename T>
+class Edge;
 
 template <typename T = int>
 class Node {
@@ -17,80 +25,29 @@ public:
     Node(T new_val, int new_capacity);
 
     //ACCESSORS
-    int get_id() const;
-    virtual size_t degree() const = 0;
-    bool has_self_loop() const;
-    bool marked() const;
+    int getId() const;
+    virtual size_t getDegree() const = 0;
+    bool hasSelfLoop() const;
+    bool isMarked() const;
+    bool hasCapacity() const;
+    unsigned getCapacity() const;
 
 protected:
     //MUTATORS
-    virtual bool insert_neighbor(Node<T> &node) = 0;
-    virtual bool erase_neighbor(Node<T> &node) = 0;
-    virtual void set_self_loop(bool loop) = 0;
-    void set_marker(bool new_marker);
+    void addEdge(Edge<T> &new_edge);
+    void setSelfloop(bool new_self_loop);
+    void setMarked(bool new_marker);
+    void increaseCapacity(unsigned new_capacity);
+    void decreaseCapacity(unsigned new_capacity, unordered_set<Edge<T>&> to_delete);
+    void decreaseCapacity(unsigned new_capacity, unordered_set<Node<T>&> to_delete);
 
     //MEMBER VARIABLES
     int id;
-    int capacity;
+    optional<unsigned> capacity;
     bool self_loop;
     bool marker;
     T val;
-
-};
-
-template <typename T = int>
-class SimpleNode : public Node<T> {
-friend class Graph;
-
-public:
-    //CONSTRUCTORS
-    SimpleNode();
-    SimpleNode(T new_val);
-    SimpleNode(T new_val, int new_capacity);
-
-    //ACCESSORS
-    unordered_set<SimpleNode<T>*>& neighborhood() const;
-    size_t degree() const;
-
-private:
-    //MUTATORS
-    bool insert_neighbor(Node<T> &node);
-    bool erase_neighbor(Node<T> &node);
-    void set_self_loop(bool loop);
-
-    //MEMBER VARIABLES
-    unordered_set<SimpleNode<T>*> neighbors;
-
-};
-
-template <typename T = int>
-class DirectedNode : public Node<T> {
-friend class Graph;
-
-public:
-    //CONSTRUCTORS
-    DirectedNode();
-    DirectedNode(T new_val);
-    DirectedNode(T new_val, int new_capacity);
-
-    //ACCESSORS
-    size_t degree() const;
-    size_t in_degree() const;
-    size_t out_degree() const;
-
-private:
-    //MUTATORS
-    bool insert_neighbor(Node<T> &node);
-    bool erase_neighbor(Node<T> &node);
-    bool insert_in_neighbor(Node<T> &node);
-    bool insert_out_neighbor(Node<T> &node);
-    bool erase_in_neighbor(Node<T> &node);
-    bool erase_out_neighbor(Node<T> &node);
-    void set_self_loop(bool loop);
-
-    //MEMBER VARIABLES
-    unordered_set<DirectedNode<T>*> in_neighbors;
-    unordered_set<DirectedNode<T>*> out_neighbors;
+    unordered_set<Edge<T>&> neighbors;
 
 };
 
