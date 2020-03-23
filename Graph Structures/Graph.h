@@ -9,10 +9,24 @@ using namespace std;
 #ifndef CGRAPH_GRAPH_H
 #define CGRAPH_GRAPH_H
 
-enum Property { SelfLoop, WeightedEdges, MultipleEdges, DirectedEdges };
+//FORWARD DECLARATIONS
+template <typename T>
+class Data;
+
+template <typename T>
+class AdjacencyList;
+
+template <typename T>
+class AdjacencyMatrix;
+
+enum Property { SelfLoop, WeightedEdges, MultipleEdges, DirectedEdges, MixedEdges };
 
 template <typename T>
 class Graph {
+friend class Data<T>;
+friend class AdjacencyList<T>;
+friend class AdjacencyMatrix<T>;
+
 public:
     //CONSTRUCTORS
     Graph();
@@ -43,7 +57,6 @@ public:
     pair<Edge<T>*, bool> addEdge(Vertex<T> &v1, Vertex<T> &v2);
     pair<Edge<T>*, bool> removeEdge(const Edge<T> &e);
     pair<Edge<T>*, bool> removeEdge(Vertex<T> &v1, Vertex<T> &v2);
-
 
 private:
     //MEMBER VARIABLES
