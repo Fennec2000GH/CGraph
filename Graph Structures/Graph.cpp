@@ -35,6 +35,38 @@ template <typename T>
 size_t Graph<T>::edgeCount() const { return edges.size(); }
 
 template <typename T>
+size_t Graph<T>::totalDegree(const Vertex<T> &v) const { return v.degree(); }
+
+template <typename T>
+size_t Graph<T>::netDegree(const Vertex<T> &v) const {
+    //edge case: undirected graph
+    if(!isDirected()) { throw invalid_argument("Graph is not directed!"); }
+
+    return outDegree(v) - inDegree(v);
+}
+
+
+template <typename T>
+size_t Graph<T>::inDegree(const Vertex<T> &v) const {
+    //edge case: undirected graph
+    if(!isDirected()) { throw invalid_argument("Graph is not directed!"); }
+
+    unordered_set<Edge<T>&> in_edges;
+    copy_if(v.neighborhood.cbegin(), v.neighborhood.cend(), in_edges.begin(), [&v](const Edge<T> &e) { return e.first() == v; } );
+    return in_edges.size();
+}
+
+template <typename T>
+size_t Graph<T>::outDegree(const Vertex<T> &v) const {
+    //edge case: undirected graph
+    if(!isDirected()) { throw invalid_argument("Graph is not directed!"); }
+
+    unordered_set<Vertex<T>&> out_edges;
+    copy_if(v.neighbors.cbegin(), v.neighbors.cend(), out_edges.begin(), [&v](const Edge<T> &e) { return e.second() == v; } );
+    return out_edges.size();
+}
+
+template <typename T>
 bool Graph<T>::containsVertex(const Vertex<T> &v) const { return vertices.count(v) == 1; }
 
 template <typename T>
@@ -47,6 +79,45 @@ bool Graph<T>::containsEdge(const Vertex<T> &v1, const Vertex<T> &v2) const {
             edges.cend(),
             [&v1, &v2](Edge<T> &e){ return (e.first() == v1 && e.second() == v2 || e.first() == v2 && e.second() == v1); });
 }
+
+template <typename T>
+bool Graph<T>::isUndirected() const { return properties.find(Property::DirectedEdges) == properties.end(); }
+
+template <typename T>
+bool Graph<T>::isDirected() const { return properties.find(Property::DirectedEdges) != properties.end(); }
+
+template <typename T>
+bool Graph<T>::isUnweighted() const { return properties.find(Property::WeightedEdges) == properties.end(); }
+
+template <typename T>
+bool Graph<T>::isWeighted() const { return properties.find(Property::WeightedEdges) != properties.end();}
+
+template <typename T>
+bool Graph<T>::isMixed() const { return properties.find(Property::MixedEdges) != properties.end(); }
+
+template <typename T>
+bool Graph<T>::isModifiable() const { return properties.find(Property::Unmodifiable) == properties.end(); }
+
+template <typename T>
+bool Graph<T>::isMultigraph() const { return properties.find(Property::MultipleEdges) != properties.end(); }
+
+template <typename T>
+bool Graph<T>::isPseudograph() const { return isMultigraph() && allowsSelfLoops(); }
+
+template <typename T>
+bool Graph<T>::isSimple() const {
+    if(allowsSelfLoops() || isDirected() || isMixed() || isMultigraph() || isWeighted()) { return false; }
+    return true;
+}
+
+template <typename T>
+bool Graph<T>::allowsSelfLoops() const { return properties.find(Property::SelfLoops) != properties.end(); }
+
+template <typename T>
+bool Graph<T>::hasSelfLoops() const { return any_of(edges.cbegin(), edges.cend(), [](const Edge<T> &e) { return e.first() == e.second(); } ); }
+
+template <typename T>
+bool Graph<T>::hasSelfLoops(const Vertex<T> &v) const { return any_of(v.neighbors.cbegin(), v.neighbors.cend(), [](const Edge<T> &e) { return e.first() == e.second(); } ); }
 
 template <typename T>
 Edge<T>& Graph<T>::getEdge(const Vertex<T> &v1, const Vertex<T> &v2) const {

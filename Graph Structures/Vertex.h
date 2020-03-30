@@ -33,28 +33,26 @@ public:
    ~Vertex();
 
     //ACCESSORS
-    int getId() const;
-    bool hasSelfLoop() const;
+    int getID() const;
     bool isMarked() const;
     bool hasCapacity() const;
     unsigned getCapacity() const;
+    size_t degree() const;
     unordered_set<Vertex<T>&> vertexNeighborhood() const;
     unordered_set<Edge<T>&> edgeNeighborhood() const;
 
 private:
     //MUTATORS
-    void setSelfloop(bool new_self_loop);
     void setMarked(bool new_marker);
     void increaseCapacity(unsigned new_capacity);
     void decreaseCapacity(unsigned new_capacity, unordered_set<Edge<T>&> to_delete);
     void decreaseCapacity(unsigned new_capacity, unordered_set<Vertex<T>&> to_delete);
 
     //MEMBER VARIABLES
+    T val;
     int id;
-    bool self_loop;
     bool marker;
     optional<unsigned> capacity;
-    T val;
     unordered_set<Edge<T>&> neighbors;
 
 };

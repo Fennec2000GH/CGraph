@@ -19,7 +19,8 @@ class AdjacencyList;
 template <typename T>
 class AdjacencyMatrix;
 
-enum Property { SelfLoop, WeightedEdges, MultipleEdges, DirectedEdges, MixedEdges };
+//enum for graph type and features
+enum Property { Cycleless, SelfLoops, Unmodifiable, WeightedEdges, MultipleEdges, DirectedEdges, MixedEdges };
 
 template <typename T>
 class Graph {
@@ -41,9 +42,25 @@ public:
     string getTitle() const;
     size_t vertexCount() const;
     size_t edgeCount() const;
+    size_t totalDegree(const Vertex<T> &v) const;
+    size_t netDegree(const Vertex<T> &v) const;
+    size_t inDegree(const Vertex<T> &v) const;
+    size_t outDegree(const Vertex<T> &v) const;
     bool containsVertex(const Vertex<T> &v) const;
     bool containsEdge(const Edge<T> &e) const;
     bool containsEdge(const Vertex<T> &v1, const Vertex<T> &v2) const;
+    bool isUndirected() const;
+    bool isDirected() const;
+    bool isUnweighted() const;
+    bool isWeighted() const;
+    bool isMixed() const;
+    bool isModifiable() const;
+    bool isMultigraph() const;
+    bool isPseudograph() const;
+    bool isSimple() const;
+    bool allowsSelfLoops() const;
+    bool hasSelfLoops() const;
+    bool hasSelfLoops(const Vertex<T> &v) const;
     Edge<T>& getEdge(const Vertex<T> &v1, const Vertex<T> &v2) const;
     unordered_set<Vertex<T>&> vertexSet() const;
     unordered_set<Edge<T>&> edgeSet() const;
