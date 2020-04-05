@@ -3,6 +3,7 @@
 #include "Edge.h"
 #include <algorithm>
 #include <iostream>
+#include <iterator>
 #include <unordered_set>
 using namespace std;
 
@@ -24,6 +25,13 @@ enum Property { Cycleless, SelfLoops, Unmodifiable, WeightedEdges, MultipleEdges
 
 template <typename T>
 class Graph {
+//ITERATOR REDECLARATIONS
+using vertex_iterator = typename unordered_set<Vertex<T>&>::iterator;
+using const_vertex_iterator = typename unordered_set<Vertex<T>&>::const_iterator;
+using edge_iterator = typename unordered_set<Edge<T>&>::iterator;
+using const_edge_iterator = typename unordered_set<Edge<T>&>::const_iterator;
+
+//FRIEND CLASS DECLARATIONS
 friend class Data<T>;
 friend class AdjacencyList<T>;
 friend class AdjacencyMatrix<T>;
@@ -48,6 +56,7 @@ public:
     size_t outDegree(const Vertex<T> &v) const;
     bool containsVertex(const Vertex<T> &v) const;
     bool containsEdge(const Edge<T> &e) const;
+    bool containsEdge(const Edge<T> &e, bool by_content) const;
     bool containsEdge(const Vertex<T> &v1, const Vertex<T> &v2) const;
     bool isUndirected() const;
     bool isDirected() const;
@@ -69,11 +78,15 @@ public:
 
     //MUTATORS
     void set_title(const string &new_title);
-    pair<Vertex<T>*, bool> addVertex(const Vertex<T> &new_vertex);
-    pair<Vertex<T>*, bool> removeVertex(Vertex<T> &deleted_vertex);
-    pair<Edge<T>*, bool> addEdge(Vertex<T> &v1, Vertex<T> &v2);
-    pair<Edge<T>*, bool> removeEdge(const Edge<T> &e);
-    pair<Edge<T>*, bool> removeEdge(Vertex<T> &v1, Vertex<T> &v2);
+    virtual pair<Vertex<T>*, bool> addVertex(const Vertex<T> &new_vertex);
+    virtual pair<Vertex<T>*, bool> removeVertex(Vertex<T> &deleted_vertex);
+    virtual pair<Edge<T>*, bool> addEdge(Edge<T> &e);
+    virtual pair<Edge<T>*, bool> addEdge(Vertex<T> &v1, Vertex<T> &v2);
+    virtual unordered_set<pair<Edge<T>*, bool>> addAllEdges(edge_iterator first, edge_iterator last);
+    virtual unordered_set<pair<Edge<T>*, bool>> addAllEdges(const unordered_set<Edge<T>&> edge_set);
+    virtual bool addEdge(const unordered_set<Edge<T>&> &);
+    virtual pair<Edge<T>*, bool> removeEdge(const Edge<T> &e);
+    virtual pair<Edge<T>*, bool> removeEdge(Vertex<T> &v1, Vertex<T> &v2);
 
 private:
     //MEMBER VARIABLES

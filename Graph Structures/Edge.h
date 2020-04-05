@@ -47,7 +47,7 @@ private:
     Vertex<T> &v1;
     Vertex<T> &v2;
     bool directed;
-    optional<double> weight;
+    optional<double> weight; 
 
 };
 
