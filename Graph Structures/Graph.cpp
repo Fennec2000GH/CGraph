@@ -29,6 +29,31 @@ Graph<T>::Graph(Graph<T> &other_graph): title(other_graph.title) {
 template <typename T>
 Graph<T>::~Graph() { }
 
+//ITERATORS
+template <typename T>
+typename Graph<T>::vertex_iterator Graph<T>::vbegin() { return vertices.begin(); }
+
+template <typename T>
+typename Graph<T>::vertex_iterator Graph<T>::vend() { return vertices.end(); }
+
+template <typename T>
+typename Graph<T>::const_vertex_iterator Graph<T>::cvbegin() { return vertices.cbegin(); }
+
+template <typename T>
+typename Graph<T>::const_vertex_iterator Graph<T>::cvend() { return vertices.cend(); }
+
+template <typename T>
+typename Graph<T>::edge_iterator Graph<T>::ebegin() { return  edges.begin(); }
+
+template <typename T>
+typename Graph<T>::edge_iterator Graph<T>::eend() { return edges.end(); }
+
+template <typename T>
+typename Graph<T>::const_edge_iterator Graph<T>::cebegin() { return edges.cbegin(); }
+
+template <typename T>
+typename Graph<T>::const_edge_iterator Graph<T>::ceend() { return edges.cend(); }
+
 //ACCESSORS
 /* Gets the title of the graph. */
 template <typename T>
@@ -241,7 +266,7 @@ pair<Vertex<T>*, bool> Graph<T>::removeVertex(Vertex<T> &deleted_vertex) {
 
 /* Appends new edge to the graph, as long as both endpoints are vertices already present in the graph. */
 template <typename T>
-Graph<T>::pair<Edge<T>*, bool> addEdge(Edge<T> &e) {
+pair<Edge<T>*, bool> Graph<T>::addEdge(Edge<T> &e) {
     //edge case: one or both endpoints are not vertices in the graph
     if(!containsVertex(e.first()) || !containsVertex(e.second())) { throw invalid_argument("One or both endpoints are not vertices in this graph."); }
 
@@ -256,7 +281,7 @@ Graph<T>::pair<Edge<T>*, bool> addEdge(Edge<T> &e) {
 template <typename T>
 pair<Edge<T>*, bool> Graph<T>::addEdge(Vertex<T> &v1, Vertex<T> &v2) {
     //edge case: one or both endpoints are not vertices in the graph
-    if(!containsVertex(e.first()) || !containsVertex(e.second())) { throw invalid_argument("One or both endpoints are not vertices in this graph."); }
+    if(!containsVertex(v1) || !containsVertex(v2)) { throw invalid_argument("One or both endpoints are not vertices in this graph."); }
 
     //edge case: edge already exists in graph
     if(containsEdge(v1, v2)) { return pair<Edge<T>*, bool>(getEdge(v1, v2), false); }
@@ -269,9 +294,10 @@ pair<Edge<T>*, bool> Graph<T>::addEdge(Vertex<T> &v1, Vertex<T> &v2) {
  * already present in the graph.
  */
 template <typename T>
-unordered_set<Pair<Edge<T>*, bool>> Graph<T>::addAllEdge(edge_iterator it1, edge_iterator it2) {
-
-
+unordered_set<pair<Edge<T>*, bool>> Graph<T>::addAllEdges(edge_iterator it1, edge_iterator it2) {
+    unordered_set<pair<Edge<T>*, bool>> output;
+    for(auto it = it1; it != it2 && it != nullptr; it++) { output.insert(addEdge(*it)); }
+    return output;
 }
 
 /* Appends all new edges to the graph given in an unordered set. The endpoints for each edge must be
@@ -279,8 +305,9 @@ unordered_set<Pair<Edge<T>*, bool>> Graph<T>::addAllEdge(edge_iterator it1, edge
  */
 template <typename T>
 unordered_set<pair<Edge<T>*, bool>> Graph<T>::addAllEdges(const unordered_set<Edge<T>&> edge_set) {
-
-
+    unordered_set<pair<Edge<T>*, bool>> output;
+    for(Edge<T> &e : edge_set) { output.insert(addEdge(e));}
+    return output;
 }
 
 /* Removes an edge from the graph. */

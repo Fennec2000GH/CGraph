@@ -43,10 +43,10 @@ public:
 
 private:
     //MUTATORS
-    void setMarked(bool new_marker);
-    void increaseCapacity(unsigned new_capacity);
-    void decreaseCapacity(unsigned new_capacity, unordered_set<Edge<T>&> to_delete);
-    void decreaseCapacity(unsigned new_capacity, unordered_set<Vertex<T>&> to_delete);
+    virtual void setMarked(bool new_marker);
+    virtual void increaseCapacity(unsigned new_capacity);
+    virtual void decreaseCapacity(unsigned new_capacity, unordered_set<Edge<T>&> to_delete);
+    virtual void decreaseCapacity(unsigned new_capacity, unordered_set<Vertex<T>&> to_delete);
 
     //MEMBER VARIABLES
     T val;

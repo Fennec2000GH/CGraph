@@ -1,12 +1,25 @@
-//
-// Created by Caijun Qin on 4/5/20.
-//
+
+#pragma once
+#include "Graph.h"
+using namespace std;
 
 #ifndef CGRAPH_SIMPLEUNDIRECTEDGRAPH_H
 #define CGRAPH_SIMPLEUNDIRECTEDGRAPH_H
 
+template <typename T>
+class SimpleGraph : public Graph<T> {
+public:
+    //CONSTRUCTORS
+    SimpleGraph();
+    SimpleGraph(string new_title);
+    SimpleGraph(const SimpleGraph<T> &other_graph);
 
-class SimpleUndirectedGraph {
+    //DESTRUCTORS
+    ~SimpleGraph();
+
+private:
+    //MEMBER VARIABLES
+
 
 };
 

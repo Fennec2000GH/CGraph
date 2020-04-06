@@ -25,7 +25,7 @@ enum Property { Cycleless, SelfLoops, Unmodifiable, WeightedEdges, MultipleEdges
 
 template <typename T>
 class Graph {
-//ITERATOR REDECLARATIONS
+//ITERATOR RENAMES
 using vertex_iterator = typename unordered_set<Vertex<T>&>::iterator;
 using const_vertex_iterator = typename unordered_set<Vertex<T>&>::const_iterator;
 using edge_iterator = typename unordered_set<Edge<T>&>::iterator;
@@ -45,6 +45,16 @@ public:
 
     //DESTRUCTORS
     ~Graph();
+
+    //ITERATORS
+    vertex_iterator vbegin();
+    vertex_iterator vend();
+    const_vertex_iterator cvbegin();
+    const_vertex_iterator cvend();
+    edge_iterator ebegin();
+    edge_iterator eend();
+    const_edge_iterator cebegin();
+    const_edge_iterator ceend();
 
     //ACCESSORS
     string getTitle() const;
