@@ -271,7 +271,7 @@ pair<Edge<T>*, bool> Graph<T>::addEdge(Edge<T> &e) {
     if(!containsVertex(e.first()) || !containsVertex(e.second())) { throw invalid_argument("One or both endpoints are not vertices in this graph."); }
 
     //edge case: edge is already in graph
-    if(contains(e)) { return pair<Edge<T>*, bool>(&e, false); }
+    if(contains(e) && !isMultigraph()) { return pair<Edge<T>*, bool>(&e, false); }
 
     edges.insert(e);
     return pair<Edge<T>*, bool>(&e, true);
@@ -284,7 +284,7 @@ pair<Edge<T>*, bool> Graph<T>::addEdge(Vertex<T> &v1, Vertex<T> &v2) {
     if(!containsVertex(v1) || !containsVertex(v2)) { throw invalid_argument("One or both endpoints are not vertices in this graph."); }
 
     //edge case: edge already exists in graph
-    if(containsEdge(v1, v2)) { return pair<Edge<T>*, bool>(getEdge(v1, v2), false); }
+    if(containsEdge(v1, v2) && !isMultigraph()) { return pair<Edge<T>*, bool>(getEdge(v1, v2), false); }
 
     edges.insert(new Edge(v1, v2));
     return pair<Edge<T>*, bool>(nullptr, true);
@@ -334,5 +334,59 @@ pair<Edge<T>*, bool> Graph<T>::removeEdge(Vertex<T> &v1, Vertex<T> &v2) {
     edges.erase(e);
     return pair<Edge<T>*, bool>(e, true);
 }
+
+/* Sets new weight on a certain edge in the graph. */
+template <typename T>
+void Graph<T>::setEdgeWeight(Edge<T> &e, double new_weight) {
+    //edge case: the graph does not have the Weighted property
+    if(!isWeighted()) { throw logic_error("Graph is not weighted!"); }
+
+    //edge case: edge is not in this graph
+    if(!containsEdge(e)) { throw out_of_range("Graph does not contain this edge!"); }
+
+    e.weight = new_weight;
+}
+
+/* Sets new weight on a certain edge in the graph, given its endpoints. */
+template <typename T>
+void Graph<T>::setEdgeWeight(const Vertex<T> &v1, const Vertex<T> &v2, double new_weight) {
+    //edge case: the graph does not have the Weighted property
+    if(!isWeighted()) { throw logic_error("Graph is not weighted!"); }
+
+    //edge case: one or both vertices are not in this graph
+    if(!containsVertex(v1) || !containsVertex(v2)) { throw out_of_range("Graph does not contain both vertices!"); }
+
+    Edge<T> &e = getEdge(v1, v2);
+    e.weight = new_weight;
+}
+
+/* Removes the edge weight of a certain edge, if pre-exists. */
+template <typename T>
+void Graph<T>::removeEdgeWeight(Edge<T> &e) {
+    //edge case: the graph does not have the Weighted property
+    if(!isWeighted()) { throw logic_error("Graph is not weighted!"); }
+
+    //edge case: edge is not in this graph
+    if(!containsEdge(e)) { throw out_of_range("Graph does not contain this edge!"); }
+
+    e.weight.reset();
+}
+
+/* Removes the edge weight of a certain edge, if pre-exists, given its endpoints. */
+template <typename T>
+void Graph<T>::removeEdgeWeight(const Vertex<T> &v1, const Vertex<T> &v2) {
+    //edge case: the graph does not have the Weighted property
+    if(!isWeighted()) { throw logic_error("Graph is not weighted!"); }
+
+    //edge case: one or both vertices are not in this graph
+    if(!containsVertex(v1) || !containsVertex(v2)) { throw out_of_range("Graph does not contain both vertices!"); }
+
+    Edge<T> &e = getEdge(v1, v2);
+    e.weight.reset();
+}
+
+/* Appends new property to the graph. */
+template <typename T>
+void Graph<T>::addProperty(Property new_property) { properties.insert(new_property); }
 
 int main() { return 0; }

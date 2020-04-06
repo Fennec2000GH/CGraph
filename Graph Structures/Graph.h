@@ -25,16 +25,16 @@ enum Property { Cycleless, SelfLoops, Unmodifiable, WeightedEdges, MultipleEdges
 
 template <typename T>
 class Graph {
+//FRIEND CLASS DECLARATIONS
+friend class Data<T>;
+friend class AdjacencyList<T>;
+friend class AdjacencyMatrix<T>;
+
 //ITERATOR RENAMES
 using vertex_iterator = typename unordered_set<Vertex<T>&>::iterator;
 using const_vertex_iterator = typename unordered_set<Vertex<T>&>::const_iterator;
 using edge_iterator = typename unordered_set<Edge<T>&>::iterator;
 using const_edge_iterator = typename unordered_set<Edge<T>&>::const_iterator;
-
-//FRIEND CLASS DECLARATIONS
-friend class Data<T>;
-friend class AdjacencyList<T>;
-friend class AdjacencyMatrix<T>;
 
 public:
     //CONSTRUCTORS
@@ -88,15 +88,20 @@ public:
 
     //MUTATORS
     void set_title(const string &new_title);
+//    virtual pair<Vertex<T>*, bool> addVertex();
     virtual pair<Vertex<T>*, bool> addVertex(const Vertex<T> &new_vertex);
     virtual pair<Vertex<T>*, bool> removeVertex(Vertex<T> &deleted_vertex);
     virtual pair<Edge<T>*, bool> addEdge(Edge<T> &e);
     virtual pair<Edge<T>*, bool> addEdge(Vertex<T> &v1, Vertex<T> &v2);
     virtual unordered_set<pair<Edge<T>*, bool>> addAllEdges(edge_iterator first, edge_iterator last);
     virtual unordered_set<pair<Edge<T>*, bool>> addAllEdges(const unordered_set<Edge<T>&> edge_set);
-    virtual bool addEdge(const unordered_set<Edge<T>&> &);
     virtual pair<Edge<T>*, bool> removeEdge(const Edge<T> &e);
     virtual pair<Edge<T>*, bool> removeEdge(Vertex<T> &v1, Vertex<T> &v2);
+    virtual void setEdgeWeight(Edge<T> &e, double new_weight);
+    virtual void setEdgeWeight(const Vertex<T> &v1, const Vertex<T> &v2, double new_weight);
+    virtual void removeEdgeWeight(Edge<T> &e);
+    virtual void removeEdgeWeight(const Vertex<T> &v1, const Vertex<T> &v2);
+    virtual void addProperty(Property new_property);
 
 private:
     //MEMBER VARIABLES
