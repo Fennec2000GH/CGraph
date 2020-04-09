@@ -102,7 +102,7 @@ public:
     virtual void setEdgeWeight(const Vertex<T> &v1, const Vertex<T> &v2, double new_weight);
     virtual void removeEdgeWeight(Edge<T> &e);
     virtual void removeEdgeWeight(const Vertex<T> &v1, const Vertex<T> &v2);
-    virtual void addProperty(Property new_property);
+    virtual void addProperty(Property new_property) = 0;
 
 private:
     //MEMBER VARIABLES
