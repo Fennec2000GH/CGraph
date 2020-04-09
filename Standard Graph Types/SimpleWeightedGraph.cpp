@@ -34,6 +34,33 @@ pair<Edge<T>*, bool> SimpleWeightedGraph<T>::addEdge(Edge<T> &e) {
         return pair<Edge<T>*, bool>(&e, false);
     }
 
+    //edge case: edge is directed
+    try { if(e.isDirected()) { throw invalid_argument("Edge cannot be directed!"); } }
+    catch (const invalid_argument &error ) {
+        error.what();
+        return pair<Edge<T>*, bool>(&e, false);
+    }
+
+    //edge case: one or both endpoints are not vertices in the graph
+    try {
+        if(!containsVertex(e.first()) || !containsVertex(e.second())) {
+            throw invalid_argument("One or both vertices are not in graph!");
+        }
+    } catch (const invalid_argument &error ) {
+        error.what();
+        return pair<Edge<T>*, bool>(&e, false);
+    }
+
+    //edge case: one or both endpoints are not weighted
+    try {
+        if(!e.first().isWeighted() || !e.second().isWeighted()) {
+            throw invalid_argument("One or both vertices are not weighted!");
+        }
+    } catch (const invalid_argument &error ) {
+        error.what();
+        return pair<Edge<T>*, bool>(&e, false);
+    }
+
     Graph<T>::edges.insert(e);
     return pair<Edge<T>*, bool>(&e, true);
 }
@@ -41,22 +68,21 @@ pair<Edge<T>*, bool> SimpleWeightedGraph<T>::addEdge(Edge<T> &e) {
 /* Appends new edge to the graph, given its endpoints. The endpoints must be already present in the graph. */
 template <typename T>
 pair<Edge<T>*, bool> SimpleWeightedGraph<T>::addEdge(Vertex<T> &v1, Vertex<T> &v2) {
-//edge case: graph already contains edge
-try { if(containsEdge(v1, v2)) { throw invalid_argument("Edge is already present in the graph!"); } }
-catch (const invalid_argument &error ) {
-error.what();
-return pair<Edge<T>*, bool>(nullptr, false);
-}
+    //edge case: graph already contains edge
+    try { if(containsEdge(v1, v2)) { throw invalid_argument("Edge is already present in the graph!"); } }
+    catch (const invalid_argument &error ) {
+        error.what();
+        return pair<Edge<T>*, bool>(nullptr, false);
+    }
 
-//edge case: one or both vertices are not in graph
-try { if(!containsVertex(v1) || !containsVertex(v2)) { throw invalid_argument("One or both vertices are not in graph!"); } }
-catch (const invalid_argument &error ) {
-error.what();
-return pair<Edge<T>*, bool>(nullptr, false);
-}
+    //edge case: one or both vertices are not in graph
+    try { if(!containsVertex(v1) || !containsVertex(v2)) { throw invalid_argument("One or both vertices are not in graph!"); } }
+    catch (const invalid_argument &error ) {
+        error.what();
+        return pair<Edge<T>*, bool>(nullptr, false);
+    }
 
-if(containsVertex(v1))
-Graph<T>::edges.insert(new Edge(v1, v2));
+    return Graph<T>::edges.insert(new Edge(v1, v2));
 }
 
 /* Appends all new edges to the graph in the range specified by two (2) iterators. The endpoints for each edge must be

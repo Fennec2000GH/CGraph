@@ -34,7 +34,7 @@ public:
     Vertex<T>& second() const;
     bool isDirected() const;
     bool isWeighted() const;
-    bool getWeight() const;
+    double getWeight() const;
 
 private:
     //MUTATORS

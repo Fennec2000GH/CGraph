@@ -27,11 +27,33 @@ SimpleGraph<T>::~SimpleGraph() { }
 /* Appends new edge to the graph, as long as both endpoints are vertices already present in the graph. */
 template <typename T>
 pair<Edge<T>*, bool> SimpleGraph<T>::addEdge(Edge<T> &e) {
-
-
     //edge case: graph already contains edge
     try { if (containsEdge(e)) { throw invalid_argument("Edge is already present in the graph!"); } }
     catch (const invalid_argument &error) {
+        error.what();
+        return pair<Edge<T>*, bool>(&e, false);
+    }
+
+    //edge case: edge is directed
+    try { if(e.isDirected()) { throw invalid_argument("Edge cannot be directed!"); } }
+    catch (const invalid_argument &error ) {
+        error.what();
+        return pair<Edge<T>*, bool>(&e, false);
+    }
+
+    //edge case: edge is weighted
+    try { if(e.isWeighted()) { throw invalid_argument("Edge cannot be weighted!"); } }
+    catch (const invalid_argument &error ) {
+        error.what();
+        return pair<Edge<T>*, bool>(&e, false);
+    }
+
+    //edge case: one or both endpoints are not vertices in the graph
+    try {
+        if(!containsVertex(e.first()) || !containsVertex(e.second())) {
+            throw invalid_argument("One or both vertices are not in graph!");
+        }
+    } catch (const invalid_argument &error ) {
         error.what();
         return pair<Edge<T>*, bool>(&e, false);
     }

@@ -59,7 +59,7 @@ size_t SimpleDirectedGraph<T>::outDegree(const Vertex<T> &v) const {
 template <typename T>
 pair<Edge<T>*, bool> SimpleDirectedGraph<T>::addEdge(Edge<T> &e) {
     //edge case: edge is not directed
-    try { if(!e.isDirected()) { throw invalid_argument("Edge is not directed!"); } }
+    try { if(!e.isDirected()) { throw invalid_argument("Edge must be directed!"); } }
     catch (const invalid_argument &error) {
         error.what();
         return pair<Edge<T>*, bool>(&e, false);
@@ -67,6 +67,13 @@ pair<Edge<T>*, bool> SimpleDirectedGraph<T>::addEdge(Edge<T> &e) {
 
     //edge case: graph already contains edge
     try { if(containsEdge(e)) { throw invalid_argument("Edge is already present in the graph!"); } }
+    catch (const invalid_argument &error ) {
+        error.what();
+        return pair<Edge<T>*, bool>(&e, false);
+    }
+
+    //edge case: edge is weighted
+    try { if(e.isWeighted()) { throw invalid_argument("Edge cannot be weighted!"); } }
     catch (const invalid_argument &error ) {
         error.what();
         return pair<Edge<T>*, bool>(&e, false);
@@ -104,7 +111,7 @@ pair<Edge<T>*, bool> SimpleDirectedGraph<T>::addEdge(Vertex<T> &v1, Vertex<T> &v
         return pair<Edge<T>*, bool>(nullptr, false);
     }
 
-    Edge<T> *ptr = Graph<T>::edges.insert(new Edge(v1, v2)).first;
+    Edge<T> *ptr = Graph<T>::edges.insert(new Edge(v1, v2, true)).first;
     return pair<Edge<T>*, bool>(ptr, true);
 }
 

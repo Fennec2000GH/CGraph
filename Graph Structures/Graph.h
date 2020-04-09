@@ -106,5 +106,4 @@ private:
 
 };
 
-
 #endif //CGRAPH_GRAPH_H

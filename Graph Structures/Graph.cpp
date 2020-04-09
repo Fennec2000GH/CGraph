@@ -17,7 +17,7 @@ template <typename T>
 Graph<T>::Graph(string new_title, unordered_set<Property> new_properties): Graph(new_title) { properties = new_properties; }
 
 /* Copy constructor performs deep copy of another graph. */
-template <typename T>
+template <typename T> 
 Graph<T>::Graph(Graph<T> &other_graph): title(other_graph.title) {
     vertices.clear();
     for(Vertex<T> &v : other_graph.vertices) { vertices.insert(new Vertex(v)); }
@@ -257,7 +257,7 @@ pair<Edge<T>*, bool> Graph<T>::addEdge(Edge<T> &e) {
     //edge case: one or both endpoints are not vertices in the graph
     try {
         if(!containsVertex(e.first()) || !containsVertex(e.second())) {
-            throw invalid_argument("One or both endpoints are not vertices in this graph.");
+            throw invalid_argument("One or both vertices are not in graph!");
         }
     } catch (const invalid_argument &error ) {
         error.what();
@@ -281,7 +281,7 @@ pair<Edge<T>*, bool> Graph<T>::addEdge(Vertex<T> &v1, Vertex<T> &v2) {
     //edge case: one or both endpoints are not vertices in the graph
     try {
         if (!containsVertex(v1) || !containsVertex(v2)) {
-            throw invalid_argument("One or both endpoints are not vertices in this graph.");
+            throw invalid_argument("One or both vertices are not in graph!");
         }
     } catch (const invalid_argument &error ){
         error.what();
