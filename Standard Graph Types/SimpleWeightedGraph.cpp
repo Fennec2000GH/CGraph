@@ -6,15 +6,15 @@ using namespace std;
 //CONSTRUCTORS
 /* Constructor initializes title to empty string. */
 template <typename T>
-SimpleWeightedGraph<T>::SimpleWeightedGraph():Graph<T>() { }
+SimpleWeightedGraph<T>::SimpleWeightedGraph():Graph<T>() { addProperty(Property::WeightedEdges); }
 
 /* Constructor applies new title and implements properties defining the graph. */
 template <typename T>
-SimpleWeightedGraph<T>::SimpleWeightedGraph(string new_title):Graph<T>() { }
+SimpleWeightedGraph<T>::SimpleWeightedGraph(string new_title):Graph<T>(new_title) { addProperty(Property::WeightedEdges); }
 
 /* Copy constructor performs deep copy of another graph. */
 template <typename T>
-SimpleWeightedGraph<T>::SimpleWeightGraph(const SimpleWeightedGraph<T> &other_graph):Graph<T>(other_graph) { }
+SimpleWeightedGraph<T>::SimpleWeightedGraph(const SimpleWeightedGraph<T> &other_graph):Graph<T>(other_graph) { }
 
 //DESTRUCTORS
 /* Destructs graph supposedly, but no dynamic memory is used by the graph. */
@@ -26,23 +26,21 @@ SimpleWeightedGraph<T>::~SimpleWeightedGraph() { }
 //MUTATORS
 /* Appends new edge to the graph, as long as both endpoints are vertices already present in the graph. */
 template <typename T>
-pair<Edge<T>*, bool> SimpleGraph<T>::addEdge(Edge<T> &e) {
+pair<Edge<T>*, bool> SimpleWeightedGraph<T>::addEdge(Edge<T> &e) {
+    //edge case: graph already contains edge
+    try { if (containsEdge(e)) { throw invalid_argument("Edge is already present in the graph!"); } }
+    catch (const invalid_argument &error) {
+        error.what();
+        return pair<Edge<T>*, bool>(&e, false);
+    }
 
-
-//edge case: graph already contains edge
-try { if (containsEdge(e)) { throw invalid_argument("Edge is already present in the graph!"); } }
-catch (const invalid_argument &error) {
-error.what();
-return pair<Edge<T>*, bool>(&e, false);
-}
-
-Graph<T>::edges.insert(e);
-return pair<Edge<T>*, bool>(&e, true);
+    Graph<T>::edges.insert(e);
+    return pair<Edge<T>*, bool>(&e, true);
 }
 
 /* Appends new edge to the graph, given its endpoints. The endpoints must be already present in the graph. */
 template <typename T>
-pair<Edge<T>*, bool> SimpleGraph<T>::addEdge(Vertex<T> &v1, Vertex<T> &v2) {
+pair<Edge<T>*, bool> SimpleWeightedGraph<T>::addEdge(Vertex<T> &v1, Vertex<T> &v2) {
 //edge case: graph already contains edge
 try { if(containsEdge(v1, v2)) { throw invalid_argument("Edge is already present in the graph!"); } }
 catch (const invalid_argument &error ) {
@@ -65,7 +63,7 @@ Graph<T>::edges.insert(new Edge(v1, v2));
  * already present in the graph.
  */
 template <typename T>
-unordered_set<pair<Edge<T>*, bool>> SimpleGraph<T>::addAllEdges(typename Graph<T>::edge_iterator first, typename Graph<T>::edge_iterator last) {
+unordered_set<pair<Edge<T>*, bool>> SimpleWeightedGraph<T>::addAllEdges(typename Graph<T>::edge_iterator first, typename Graph<T>::edge_iterator last) {
     unordered_set<pair<Edge<T>&, bool>> output;
     for_each(first, last, [&] (Edge<T> &e) { output.insert(addEdge(e)); } );
     return output;
@@ -75,14 +73,14 @@ unordered_set<pair<Edge<T>*, bool>> SimpleGraph<T>::addAllEdges(typename Graph<T
  * already present in the graph.
  */
 template <typename T>
-unordered_set<pair<Edge<T>*, bool>> SimpleGraph<T>::addAllEdges(const unordered_set<Edge<T>&> edge_set) {
+unordered_set<pair<Edge<T>*, bool>> SimpleWeightedGraph<T>::addAllEdges(const unordered_set<Edge<T>&> edge_set) {
 unordered_set<pair<Edge<T>*, bool>> output;
 for(Edge<T> &e : edge_set) { output.insert(addEdge(&e)); }
 return output;
 }
 
 //template <typename T>
-//pair<Edge<T>*, bool> SimpleGraph<T>::removeEdge(Vertex<T> &v1, Vertex<T> &v2);
+//pair<Edge<T>*, bool> SimpleWeightedGraph<T>::removeEdge(Vertex<T> &v1, Vertex<T> &v2);
 
 /* Sets new weight on a certain edge in the graph. */
 template <typename T>
@@ -94,7 +92,7 @@ catch (const logic_error &error ) { error.what(); }
 
 /* Sets new weight on a certain edge in the graph, given its endpoints. */
 template <typename T>
-void SimpleGraph<T>::setEdgeWeight(const Vertex<T> &v1, const Vertex<T> &v2, double new_weight) {
+void SimpleWeightedGraph<T>::setEdgeWeight(const Vertex<T> &v1, const Vertex<T> &v2, double new_weight) {
     //graph is unweighted, so this function is useless
     try { throw logic_error("Graph is unweighted!"); }
     catch (const logic_error &error ) { error.what(); }
@@ -102,7 +100,7 @@ void SimpleGraph<T>::setEdgeWeight(const Vertex<T> &v1, const Vertex<T> &v2, dou
 
 /* Removes the edge weight of a certain edge, if pre-exists. */
 template <typename T>
-void SimpleGraph<T>::removeEdgeWeight(Edge<T> &e) {
+void SimpleWeightedGraph<T>::removeEdgeWeight(Edge<T> &e) {
     //graph is unweighted, so this function is useless
     try { throw logic_error("Graph is unweighted!"); }
     catch (const logic_error &error ) { error.what(); }
@@ -110,7 +108,7 @@ void SimpleGraph<T>::removeEdgeWeight(Edge<T> &e) {
 
 /* Removes the edge weight of a certain edge, if pre-exists, given its endpoints. */
 template <typename T>
-void SimpleGraph<T>::removeEdgeWeight(const Vertex<T> &v1, const Vertex<T> &v2) {
+void SimpleWeightedGraph<T>::removeEdgeWeight(const Vertex<T> &v1, const Vertex<T> &v2) {
     //graph is unweighted, so this function is useless
     try { throw logic_error("Graph is unweighted!"); }
     catch (const logic_error &error ) { error.what(); }
@@ -118,7 +116,7 @@ void SimpleGraph<T>::removeEdgeWeight(const Vertex<T> &v1, const Vertex<T> &v2) 
 
 /* Appends new property to the graph. */
 template <typename T>
-void SimpleGraph<T>::addProperty(Property new_property) {
+void SimpleWeightedGraph<T>::addProperty(Property new_property) {
     //edge case: attempt to add invalid property
     try {
         if (allowed_properties.find(new_property) == allowed_properties.end()) {
@@ -129,5 +127,5 @@ void SimpleGraph<T>::addProperty(Property new_property) {
     Graph<T>::properties.insert(new_property);
 }
 
-
+int main() { return 0; }
 

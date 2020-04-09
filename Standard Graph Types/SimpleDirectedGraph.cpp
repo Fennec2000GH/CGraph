@@ -4,16 +4,20 @@ using namespace std;
 
 //SimpleDirectedGrapg
 //CONSTRUCTORS
+/* Constructor initializes title to empty string. */
 template <typename T>
-SimpleDirectedGraph<T>::SimpleDirectedGraph():Graph<T>() { }
+SimpleDirectedGraph<T>::SimpleDirectedGraph():Graph<T>() { addProperty(Property::DirectedEdges); }
 
+/* Constructor applies new title. */
 template <typename T>
-SimpleDirectedGraph<T>::SimpleDirectedGraph(string new_title):Graph<T>(new_title) { }
+SimpleDirectedGraph<T>::SimpleDirectedGraph(string new_title):Graph<T>(new_title) { addProperty(Property::DirectedEdges); }
 
+/* Copy constructor performs deep copy of another graph. */
 template <typename T>
 SimpleDirectedGraph<T>::SimpleDirectedGraph(const SimpleDirectedGraph<T> &other_graph):Graph<T>(other_graph) { }
 
 //DESTRUCTORS
+/* Destructs graph supposedly, but no dynamic memory is used by the graph. */
 template <typename T>
 SimpleDirectedGraph<T>::~SimpleDirectedGraph() { }
 
@@ -23,30 +27,30 @@ SimpleDirectedGraph<T>::~SimpleDirectedGraph() { }
  * edges are not considered.
  */
 template <typename T>
-size_t Graph<T>::netDegree(const Vertex<T> &v) const { return outDegree(v) - inDegree(v); }
+size_t SimpleDirectedGraph<T>::netDegree(const Vertex<T> &v) const { return outDegree(v) - inDegree(v); }
 
 /* Gets the number of incoming edges at a vertex. For mixed graphs, undirected edges are not considered. */
 template <typename T>
-size_t Graph<T>::inDegree(const Vertex<T> &v) const {
+size_t SimpleDirectedGraph<T>::inDegree(const Vertex<T> &v) const {
     try { if(!containsVertex(v)) { throw invalid_argument("Vertex is not in graph!"); } }
     catch (const invalid_argument &error ) {
         error.what();
         return -1;
     }
 
-    return count_if(v.neighborhood.cbegin(), v.neighborhood.cend(), in_edges.begin(), [&v](const Edge<T> &e) { return e.second() == v; } );
+    return count_if(Graph<T>::cebegin(), Graph<T>::ceend(), [&v](const Edge<T> &e) { return e.second() == v; } );
 }
 
 /* Gets the number of outgoing edges at a vertex. For mixed graphs, undirected edges are not considered. */
 template <typename T>
-size_t Graph<T>::outDegree(const Vertex<T> &v) const {
+size_t SimpleDirectedGraph<T>::outDegree(const Vertex<T> &v) const {
     try { if(!containsVertex(v)) { throw invalid_argument("Vertex is not in graph!"); } }
     catch (const invalid_argument &error ) {
         error.what();
         return -1;
     }
 
-    return count_if(v.neighborhood.cbegin(), v.neighborhood.cend(), in_edges.begin(), [&v](const Edge<T> &e) { return e.first() == v; } );
+    return count_if(Graph<T>::cebegin(), Graph<T>::ceend(), [&v](const Edge<T> &e) { return e.first() == v; } );
 }
 
 

@@ -81,12 +81,6 @@ unordered_set<pair<Edge<T>*, bool>> SimpleGraph<T>::addAllEdges(const unordered_
     return output;
 }
 
-template <typename T>
-pair<Edge<T>*, bool> SimpleGraph<T>::removeEdge(Vertex<T> &v1, Vertex<T> &v2) {
-
-
-}
-
 /* Appends new property to the graph. */
 template <typename T>
 void SimpleGraph<T>::addProperty(Property new_property) {

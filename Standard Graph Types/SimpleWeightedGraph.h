@@ -1,20 +1,22 @@
 
+#include "../Graph Structures/Graph.h"
+using namespace std;
+
 #ifndef CGRAPH_SIMPLEWEIGHTEDGRAPH_H
 #define CGRAPH_SIMPLEWEIGHTEDGRAPH_H
 
-
-class SimpleWeightedGraph {
+template <typename T>
+class SimpleWeightedGraph : public Graph<T> {
 public:
     //CONSTRUCTORS
     SimpleWeightedGraph();
     SimpleWeightedGraph(string new_title);
-    SimpleWeightGraph(const SimpleWeightedGraph<T> &other_graph);
+    SimpleWeightedGraph(const SimpleWeightedGraph<T> &other_graph);
 
     //DESTRUCTORS
     ~SimpleWeightedGraph();
 
     //ACCESSORS
-
 
     //MUTATORS
     pair<Edge<T>*, bool> addEdge(Edge<T> &e);
@@ -28,7 +30,8 @@ public:
     void addProperty(Property new_property);
 
 private:
-
+    //MEMBER VARIABLES
+    unordered_set<Property> allowed_properties = {Property::Cycleless, Property::Unmodifiable, Property::WeightedEdges};
 
 };
 
