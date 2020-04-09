@@ -71,39 +71,6 @@ size_t Graph<T>::edgeCount() const { return edges.size(); }
 template <typename T>
 size_t Graph<T>::totalDegree(const Vertex<T> &v) const { return v.degree(); }
 
-/* Gets the difference between the number of outgoing edges and incoming edges at a vertex. For mixed graphs, undirected
- * edges are not considered.
- */
-template <typename T>
-size_t Graph<T>::netDegree(const Vertex<T> &v) const {
-    //edge case: undirected graph
-    if(!isDirected()) { throw invalid_argument("Graph is not directed!"); }
-
-    return outDegree(v) - inDegree(v);
-}
-
-/* Gets the number of incoming edges at a vertex. For mixed graphs, undirected edges are not considered. */
-template <typename T>
-size_t Graph<T>::inDegree(const Vertex<T> &v) const {
-    //edge case: undirected graph
-    if(!isDirected()) { throw invalid_argument("Graph is not directed!"); }
-
-    unordered_set<Edge<T>&> in_edges;
-    copy_if(v.neighborhood.cbegin(), v.neighborhood.cend(), in_edges.begin(), [&v](const Edge<T> &e) { return e.first() == v; } );
-    return in_edges.size();
-}
-
-/* Gets the number of outgoing edges at a vertex. For mixed graphs, undirected edges are not considered. */
-template <typename T>
-size_t Graph<T>::outDegree(const Vertex<T> &v) const {
-    //edge case: undirected graph
-    if(!isDirected()) { throw invalid_argument("Graph is not directed!"); }
-
-    unordered_set<Vertex<T>&> out_edges;
-    copy_if(v.neighbors.cbegin(), v.neighbors.cend(), out_edges.begin(), [&v](const Edge<T> &e) { return e.second() == v; } );
-    return out_edges.size();
-}
-
 /* Check for the existence of a given vertex in the graph. */
 template <typename T>
 bool Graph<T>::containsVertex(const Vertex<T> &v) const { return vertices.count(v) == 1; }

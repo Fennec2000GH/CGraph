@@ -61,10 +61,7 @@ public:
     string getTitle() const;
     size_t vertexCount() const;
     size_t edgeCount() const;
-    size_t totalDegree(const Vertex<T> &v) const;
-    size_t netDegree(const Vertex<T> &v) const;
-    size_t inDegree(const Vertex<T> &v) const;
-    size_t outDegree(const Vertex<T> &v) const;
+    size_t degree(const Vertex<T> &v) const;
     bool containsVertex(const Vertex<T> &v) const;
     bool containsEdge(const Edge<T> &e) const;
     bool containsEdge(const Edge<T> &e, bool by_content) const;

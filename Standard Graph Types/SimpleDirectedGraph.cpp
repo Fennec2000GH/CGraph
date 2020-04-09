@@ -19,6 +19,36 @@ SimpleDirectedGraph<T>::~SimpleDirectedGraph() { }
 
 //ACCESSORS
 
+/* Gets the difference between the number of outgoing edges and incoming edges at a vertex. For mixed graphs, undirected
+ * edges are not considered.
+ */
+template <typename T>
+size_t Graph<T>::netDegree(const Vertex<T> &v) const { return outDegree(v) - inDegree(v); }
+
+/* Gets the number of incoming edges at a vertex. For mixed graphs, undirected edges are not considered. */
+template <typename T>
+size_t Graph<T>::inDegree(const Vertex<T> &v) const {
+    try { if(!containsVertex(v)) { throw invalid_argument("Vertex is not in graph!"); } }
+    catch (const invalid_argument &error ) {
+        error.what();
+        return -1;
+    }
+
+    return count_if(v.neighborhood.cbegin(), v.neighborhood.cend(), in_edges.begin(), [&v](const Edge<T> &e) { return e.second() == v; } );
+}
+
+/* Gets the number of outgoing edges at a vertex. For mixed graphs, undirected edges are not considered. */
+template <typename T>
+size_t Graph<T>::outDegree(const Vertex<T> &v) const {
+    try { if(!containsVertex(v)) { throw invalid_argument("Vertex is not in graph!"); } }
+    catch (const invalid_argument &error ) {
+        error.what();
+        return -1;
+    }
+
+    return count_if(v.neighborhood.cbegin(), v.neighborhood.cend(), in_edges.begin(), [&v](const Edge<T> &e) { return e.first() == v; } );
+}
+
 
 //MUTATORS
 /* appends new edge to the graph, as long as both endpoints are vertices already present in the graph. */

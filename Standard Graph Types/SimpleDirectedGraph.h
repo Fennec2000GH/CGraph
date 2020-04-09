@@ -20,7 +20,9 @@ public:
     ~SimpleDirectedGraph();
 
     //ACCESSORS
-
+    size_t netDegree(const Vertex<T> &v) const;
+    size_t inDegree(const Vertex<T> &v) const;
+    size_t outDegree(const Vertex<T> &v) const;
 
     //MUTATORS
     pair<Edge<T>*, bool> addEdge(Edge<T> &e);
