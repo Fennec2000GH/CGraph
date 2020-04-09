@@ -61,7 +61,7 @@ public:
     string getTitle() const;
     size_t vertexCount() const;
     size_t edgeCount() const;
-    size_t degree(const Vertex<T> &v) const;
+    size_t getDegree(const Vertex<T> &v) const;
     bool containsVertex(const Vertex<T> &v) const;
     bool containsEdge(const Edge<T> &e) const;
     bool containsEdge(const Edge<T> &e, bool by_content) const;
@@ -86,7 +86,7 @@ public:
 
     //MUTATORS
     void set_title(const string &new_title);
-//    virtual pair<Vertex<T>*, bool> addVertex();
+    virtual pair<Vertex<T>*, bool> addVertex();
     virtual pair<Vertex<T>*, bool> addVertex(const Vertex<T> &new_vertex);
     virtual pair<Vertex<T>*, bool> removeVertex(Vertex<T> &deleted_vertex);
     virtual pair<Edge<T>*, bool> addEdge(Edge<T> &e);
@@ -95,10 +95,6 @@ public:
     virtual unordered_set<pair<Edge<T>*, bool>> addAllEdges(const unordered_set<Edge<T>&> edge_set);
     virtual pair<Edge<T>*, bool> removeEdge(const Edge<T> &e);
     virtual pair<Edge<T>*, bool> removeEdge(Vertex<T> &v1, Vertex<T> &v2);
-    virtual void setEdgeWeight(Edge<T> &e, double new_weight);
-    virtual void setEdgeWeight(const Vertex<T> &v1, const Vertex<T> &v2, double new_weight);
-    virtual void removeEdgeWeight(Edge<T> &e);
-    virtual void removeEdgeWeight(const Vertex<T> &v1, const Vertex<T> &v2);
     virtual void addProperty(Property new_property) = 0;
 
 private:

@@ -37,23 +37,17 @@ public:
     bool isMarked() const;
     bool hasCapacity() const;
     unsigned getCapacity() const;
-    size_t degree() const;
-    unordered_set<Vertex<T>&> vertexNeighborhood() const;
-    unordered_set<Edge<T>&> edgeNeighborhood() const;
+    size_t getDegree() const;
 
 private:
     //MUTATORS
-    virtual void setMarked(bool new_marker);
-    virtual void increaseCapacity(unsigned new_capacity);
-    virtual void decreaseCapacity(unsigned new_capacity, unordered_set<Edge<T>&> to_delete);
-    virtual void decreaseCapacity(unsigned new_capacity, unordered_set<Vertex<T>&> to_delete);
+    void setMarked(bool new_marker);
 
     //MEMBER VARIABLES
     T val;
     int id;
     bool marker;
     optional<unsigned> capacity;
-    unordered_set<Edge<T>&> neighbors;
 
 };
 
