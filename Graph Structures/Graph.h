@@ -64,7 +64,7 @@ public:
     size_t getDegree(const Vertex<T> &v) const;
     bool containsVertex(const Vertex<T> &v) const;
     bool containsEdge(const Edge<T> &e) const;
-    bool containsEdge(const Edge<T> &e, bool by_content) const;
+    bool containsMatchingEdge(const Edge<T> &e) const;
     bool containsEdge(const Vertex<T> &v1, const Vertex<T> &v2) const;
     bool isUndirected() const;
     bool isDirected() const;
@@ -89,7 +89,7 @@ public:
     virtual pair<Vertex<T>*, bool> addVertex();
     virtual pair<Vertex<T>*, bool> addVertex(const Vertex<T> &new_vertex);
     virtual pair<Vertex<T>*, bool> removeVertex(Vertex<T> &deleted_vertex);
-    virtual pair<Edge<T>*, bool> addEdge(Edge<T> &e);
+    virtual pair<Edge<T>*, bool> addEdge(const Edge<T> &e);
     virtual pair<Edge<T>*, bool> addEdge(Vertex<T> &v1, Vertex<T> &v2);
     virtual unordered_set<pair<Edge<T>*, bool>> addAllEdges(edge_iterator first, edge_iterator last);
     virtual unordered_set<pair<Edge<T>*, bool>> addAllEdges(const unordered_set<Edge<T>&> edge_set);
@@ -101,7 +101,7 @@ private:
     //MEMBER VARIABLES
     string title;
     unordered_set<Vertex<T>&> vertices;
-    unordered_set<Edge<T>&> edges;
+    unordered_set<Edge<T>&> multi_edges;
     unordered_set<Property> properties;
 
 };

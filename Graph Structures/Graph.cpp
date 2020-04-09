@@ -14,19 +14,19 @@ Graph<T>::Graph(string new_title): title(new_title) { }
 
 /* Constructor applies new title and implements properties defining the graph. */
 template <typename T>
-Graph<T>::Graph(string new_title, unordered_set<Property> new_properties): Graph(new_title) { properties = new_properties; }
+Graph<T>::Graph(string new_title, unordered_set<Property> new_properties): Graph(new_title) { Graph<T>::properties = new_properties; }
 
 /* Copy constructor performs deep copy of another graph. */
-template <typename T> 
+template <typename T>
 Graph<T>::Graph(Graph<T> &other_graph): title(other_graph.title) {
     vertices.clear();
-    for(Vertex<T> &v : other_graph.vertices) { vertices.insert(new Vertex(v)); }
+    for(Vertex<T> &v : other_graph.vertices) { Graph<T>::vertices.insert(new Vertex(v)); }
 
-    edges.clear();
-    for(Edge<T> &e : other_graph.edges) { edges.insert(new Edge(e)); }
+    Graph<T>::edges.clear();
+    for(Edge<T> &e : other_graph.edges) { Graph<T>::edges.insert(new Edge(e)); }
 
     properties.clear();
-    for(Property p : other_graph.properties) { properties.insert(p); }
+    for(Property p : other_graph.properties) { Graph<T>::properties.insert(p); }
 }
 
 //DESTRUCTORS
@@ -36,28 +36,28 @@ Graph<T>::~Graph() { }
 
 //ITERATORS
 template <typename T>
-typename Graph<T>::vertex_iterator Graph<T>::vbegin() { return vertices.begin(); }
+typename Graph<T>::vertex_iterator Graph<T>::vbegin() { return Graph<T>::vertices.begin(); }
 
 template <typename T>
-typename Graph<T>::vertex_iterator Graph<T>::vend() { return vertices.end(); }
+typename Graph<T>::vertex_iterator Graph<T>::vend() { return Graph<T>::vertices.end(); }
 
 template <typename T>
-typename Graph<T>::const_vertex_iterator Graph<T>::cvbegin() { return vertices.cbegin(); }
+typename Graph<T>::const_vertex_iterator Graph<T>::cvbegin() { return Graph<T>::vertices.cbegin(); }
 
 template <typename T>
-typename Graph<T>::const_vertex_iterator Graph<T>::cvend() { return vertices.cend(); }
+typename Graph<T>::const_vertex_iterator Graph<T>::cvend() { return Graph<T>::vertices.cend(); }
 
 template <typename T>
-typename Graph<T>::edge_iterator Graph<T>::ebegin() { return  edges.begin(); }
+typename Graph<T>::edge_iterator Graph<T>::ebegin() { return Graph<T>::edges.begin(); }
 
 template <typename T>
-typename Graph<T>::edge_iterator Graph<T>::eend() { return edges.end(); }
+typename Graph<T>::edge_iterator Graph<T>::eend() { return Graph<T>::edges.end(); }
 
 template <typename T>
-typename Graph<T>::const_edge_iterator Graph<T>::cebegin() { return edges.cbegin(); }
+typename Graph<T>::const_edge_iterator Graph<T>::cebegin() { return Graph<T>::edges.cbegin(); }
 
 template <typename T>
-typename Graph<T>::const_edge_iterator Graph<T>::ceend() { return edges.cend(); }
+typename Graph<T>::const_edge_iterator Graph<T>::ceend() { return Graph<T>::edges.cend(); }
 
 //ACCESSORS
 /* Gets the title of the graph. */
@@ -70,7 +70,7 @@ size_t Graph<T>::vertexCount() const { return vertices.size(); }
 
 /* Gets the number of edges in the graph. */
 template <typename T>
-size_t Graph<T>::edgeCount() const { return edges.size(); }
+size_t Graph<T>::edgeCount() const { return Graph<T>::edges.size(); }
 
 /* Gets the number of edges incident with a vertex, regardless of edge type.*/
 template <typename T>
@@ -82,23 +82,22 @@ bool Graph<T>::containsVertex(const Vertex<T> &v) const { return vertices.count(
 
 /* Check for the existence of a given edge in the graph. */
 template <typename T>
-bool Graph<T>::containsEdge(const Edge<T> &e) const { return edges.count(e) == 1; }
+bool Graph<T>::containsEdge(const Edge<T> &e) const { return Graph<T>::edges.count(e) == 1; }
 
-/* Check for the existence of a given edge in the graph. Two (2) edges are considered equivalent if the field values in
- * both are the same, and <param>by_content</param> is <code>true</code>.
+/* Check for the existence of a given edge that has endpoints equivalent to the endpoints of given edge by content and
+ * also has matching edge field values.
  */
 template <typename T>
-bool Graph<T>::containsEdge(const Edge<T> &e, bool by_content) const {
-    if(!by_content) { return containsEdge(e); }
+bool Graph<T>::containsMatchingEdge(const Edge<T> &e) const {
     return any_of(
-            edges.cbegin(),
-            edges.cend(),
+            cebegin(),
+            ceend(),
             [&e](Edge<T> &r) { return
-                (r.v1 == e.v1) &&
-                (r.v2 ==e.v2) &&
+                (r.v1.equals(e.v1)) &&
+                (r.v2.equals(e.v2)) &&
                 (r.directed == e.directed) &&
-                (r.weight == e.weight); }
-            );
+                (r.weight == e.weight);
+            });
 }
 
 /* Check for the existence of a given edge in the graph. The edge must have <param>v1</param> and <param>v2</param>
@@ -107,8 +106,8 @@ bool Graph<T>::containsEdge(const Edge<T> &e, bool by_content) const {
 template <typename T>
 bool Graph<T>::containsEdge(const Vertex<T> &v1, const Vertex<T> &v2) const {
     return any_of(
-            edges.cbegin(),
-            edges.cend(),
+            cebegin(),
+            ceend(),
             [&v1, &v2](Edge<T> &e) { return (e.first() == v1 && e.second() == v2 || e.first() == v2 && e.second() == v1); });
 }
 
@@ -159,7 +158,7 @@ bool Graph<T>::allowsSelfLoops() const { return properties.find(Property::SelfLo
 
 /* Checks whether the graph actually contains any self-loops. */
 template <typename T>
-bool Graph<T>::hasSelfLoops() const { return any_of(edges.cbegin(), edges.cend(), [](const Edge<T> &e) { return e.first() == e.second(); } ); }
+bool Graph<T>::hasSelfLoops() const { return any_of(cebegin(), ceend(), [](const Edge<T> &e) { return e.first() == e.second(); } ); }
 
 /* Checks whether a certain vertex of the graph contains a self-loop. */
 template <typename T>
@@ -169,23 +168,23 @@ bool Graph<T>::hasSelfLoops(const Vertex<T> &v) const { return any_of(v.neighbor
 template <typename T>
 Edge<T>& Graph<T>::getEdge(const Vertex<T> &v1, const Vertex<T> &v2) const {
     Edge<T> *it = find_if(
-            edges.begin(),
-            edges.end(),
+            cebegin(),
+            ceend(),
             [&v1, &v2](Edge<T> &e) { return (e.first() == v1 && e.second() == v2 || e.first() == v2 && e.second() == v1); } );
 
     //error: such an edge does not exist in graph
-    if(it == edges.end()) { throw out_of_range("Such an edge does not exist in graph!"); }
+    if(it == ceend()) { throw out_of_range("Such an edge does not exist in graph!"); }
 
     return *it;
 }
 
 /* Gets the set of all vertices in the graph. */
 template <typename T>
-unordered_set<Vertex<T>&> Graph<T>::vertexSet() const { return vertices; }
+unordered_set<Vertex<T>&> Graph<T>::vertexSet() const { return Graph<T>::vertices; }
 
 /* Gets the set of edges in the graph. */
 template <typename T>
-unordered_set<Edge<T>&> Graph<T>::edgeSet() const { return edges; }
+unordered_set<Edge<T>&> Graph<T>::edgeSet() const { return Graph<T>::edges; }
 
 /* Gets the set of all adjacent vertices to a certain vertex in the graph. */
 template <typename T>
@@ -253,7 +252,7 @@ pair<Vertex<T>*, bool> Graph<T>::removeVertex(Vertex<T> &deleted_vertex) {
 
 /* Appends new edge to the graph, as long as both endpoints are vertices already present in the graph. */
 template <typename T>
-pair<Edge<T>*, bool> Graph<T>::addEdge(Edge<T> &e) {
+pair<Edge<T>*, bool> Graph<T>::addEdge(const Edge<T> &e) {
     //edge case: one or both endpoints are not vertices in the graph
     try {
         if(!containsVertex(e.first()) || !containsVertex(e.second())) {
@@ -271,7 +270,7 @@ pair<Edge<T>*, bool> Graph<T>::addEdge(Edge<T> &e) {
         return pair<Edge<T>*, bool>(&e, false);
     }
 
-    edges.insert(e);
+    Graph<T>::edges.insert(e);
     return pair<Edge<T>*, bool>(&e, true);
 }
 
@@ -295,7 +294,7 @@ pair<Edge<T>*, bool> Graph<T>::addEdge(Vertex<T> &v1, Vertex<T> &v2) {
         return pair<Edge<T>*, bool>(getEdge(v1, v2), false);
     }
 
-    edges.insert(new Edge(v1, v2));
+    Graph<T>::edges.insert(new Edge(v1, v2));
     return pair<Edge<T>*, bool>(nullptr, true);
 }
 
@@ -331,7 +330,7 @@ pair<Edge<T>*, bool> Graph<T>::removeEdge(const Edge<T> &e) {
 
     e.first().neighbors.erase(e);
     e.second().neighbors.erase(e);
-    edges.erase(e);
+    Graph<T>::edges.erase(e);
     return pair<Edge<T>*, bool>(&e, true);
 }
 
@@ -348,7 +347,7 @@ pair<Edge<T>*, bool> Graph<T>::removeEdge(Vertex<T> &v1, Vertex<T> &v2) {
     Edge<T> &e = getEdge(v1, v2);
     e.first().neighbors.erase(e);
     e.second().neighbors.erase(e);
-    edges.erase(e);
+    Graph<T>::edges.erase(e);
     return pair<Edge<T>*, bool>(e, true);
 }
 

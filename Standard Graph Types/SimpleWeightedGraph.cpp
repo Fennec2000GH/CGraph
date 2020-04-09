@@ -51,16 +51,6 @@ pair<Edge<T>*, bool> SimpleWeightedGraph<T>::addEdge(Edge<T> &e) {
         return pair<Edge<T>*, bool>(&e, false);
     }
 
-    //edge case: one or both endpoints are not weighted
-    try {
-        if(!e.first().isWeighted() || !e.second().isWeighted()) {
-            throw invalid_argument("One or both vertices are not weighted!");
-        }
-    } catch (const invalid_argument &error ) {
-        error.what();
-        return pair<Edge<T>*, bool>(&e, false);
-    }
-
     Graph<T>::edges.insert(e);
     return pair<Edge<T>*, bool>(&e, true);
 }
@@ -82,7 +72,7 @@ pair<Edge<T>*, bool> SimpleWeightedGraph<T>::addEdge(Vertex<T> &v1, Vertex<T> &v
         return pair<Edge<T>*, bool>(nullptr, false);
     }
 
-    return Graph<T>::edges.insert(new Edge(v1, v2));
+    return pair<Edge<T>*, bool>(*Graph<T>::edges.insert(new Edge(v1, v2)), true);
 }
 
 /* Appends all new edges to the graph in the range specified by two (2) iterators. The endpoints for each edge must be
@@ -100,13 +90,10 @@ unordered_set<pair<Edge<T>*, bool>> SimpleWeightedGraph<T>::addAllEdges(typename
  */
 template <typename T>
 unordered_set<pair<Edge<T>*, bool>> SimpleWeightedGraph<T>::addAllEdges(const unordered_set<Edge<T>&> edge_set) {
-unordered_set<pair<Edge<T>*, bool>> output;
-for(Edge<T> &e : edge_set) { output.insert(addEdge(&e)); }
-return output;
+    unordered_set<pair<Edge<T>*, bool>> output;
+    for(Edge<T> &e : edge_set) { output.insert(addEdge(e)); }
+    return output;
 }
-
-//template <typename T>
-//pair<Edge<T>*, bool> SimpleWeightedGraph<T>::removeEdge(Vertex<T> &v1, Vertex<T> &v2);
 
 /* Sets new weight on a certain edge in the graph. */
 template <typename T>

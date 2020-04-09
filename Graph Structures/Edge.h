@@ -35,6 +35,7 @@ public:
     bool isDirected() const;
     bool isWeighted() const;
     double getWeight() const;
+    bool equals(const Edge<T> &other_edge) const;
 
 private:
     //MUTATORS

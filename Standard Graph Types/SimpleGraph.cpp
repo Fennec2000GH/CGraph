@@ -79,8 +79,7 @@ pair<Edge<T>*, bool> SimpleGraph<T>::addEdge(Vertex<T> &v1, Vertex<T> &v2) {
         return pair<Edge<T>*, bool>(nullptr, false);
     }
 
-    if(containsVertex(v1))
-    Graph<T>::edges.insert(new Edge(v1, v2));
+    return Graph<T>::edges.insert(new Edge(v1, v2));
 }
 
 /* Appends all new edges to the graph in the range specified by two (2) iterators. The endpoints for each edge must be
@@ -99,7 +98,7 @@ unordered_set<pair<Edge<T>*, bool>> SimpleGraph<T>::addAllEdges(typename Graph<T
 template <typename T>
 unordered_set<pair<Edge<T>*, bool>> SimpleGraph<T>::addAllEdges(const unordered_set<Edge<T>&> edge_set) {
     unordered_set<pair<Edge<T>*, bool>> output;
-    for(Edge<T> &e : edge_set) { output.insert(addEdge(&e)); }
+    for(Edge<T> &e : edge_set) { output.insert(addEdge(e)); }
     return output;
 }
 

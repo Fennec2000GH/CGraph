@@ -56,6 +56,17 @@ double Edge<T>::getWeight() const {
     return weight.value();
 }
 
+/* Checks whether this edge equals to another edge by containing the same values for each field */
+template <typename T>
+bool Edge<T>::equals(const Edge<T> &other_edge) const {
+    //base case: same exact reference
+    if(this == other_edge) { return true; }
+    return (this -> first() == other_edge.first) &&
+    (this -> second() == other_edge.second()) &&
+    (this -> directed == other_edge.directed) &&
+    (this -> weight == other_edge.weight);
+}
+
 //MUTATORS
 /* Sets a new vertex to be the first endpoint. The old vertex loses the edge */
 template <typename T>

@@ -28,19 +28,21 @@ Multigraph<T>::~Multigraph() { }
 template <typename T>
 pair<Edge<T>*, bool> Multigraph<T>::addEdge(Edge<T> &e) {
     //edge case: edge is directed
-
-
-    //edge case: one or both endpoints are weighted
-    try {
-        if(e.first().isWeighted() || e.second().isWeighted()) {
-            throw invalid_argument("weighted!");
-        }
-    } catch (const invalid_argument &error ) {
+    try { if(e.isDirected()) { throw invalid_argument("Edge cannot be directed!"); } }
+    catch (const invalid_argument &error ) {
         error.what();
         return pair<Edge<T>*, bool>(&e, false);
     }
 
-    Graph<T>::edges.insert(e);
+    //edge case: edge is weighted
+    try { if(e.isWeighted()) { throw invalid_argument("Edge cannot be weighted!"); } }
+    catch (const invalid_argument &error ) {
+        error.what();
+        return pair<Edge<T>*, bool>(&e, false);
+    }
+
+    multi_edges.insert(, )
+    Graph<T>::
     return pair<Edge<T>*, bool>(&e, true);
 }
 

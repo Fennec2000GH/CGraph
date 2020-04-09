@@ -38,6 +38,7 @@ public:
     bool hasCapacity() const;
     unsigned getCapacity() const;
     size_t getDegree() const;
+    bool equals(const Vertex<T> &other_vertex) const;
 
 private:
     //MUTATORS
