@@ -240,7 +240,11 @@ void Graph<T>::set_title(const string &new_title) { title = new_title; }
 template <typename T>
 pair<Vertex<T>*, bool> Graph<T>::addVertex(const Vertex<T> &new_vertex) {
     //edge case: already exists in graph
-    if(containsVertex(new_vertex)) { return pair<Vertex<T>*, bool>(&new_vertex, false); }
+    try { if(containsVertex(new_vertex)) { throw invalid_argument("Graph already contains vertex!"); } }
+    catch(const invalid_argument &error) {
+        error.what();
+        return pair<Vertex<T>*, bool>(&new_vertex, false);
+    }
 
     vertices.insert(new_vertex);
     return pair<Vertex<T>*, bool>(&new_vertex, true);
@@ -250,7 +254,11 @@ pair<Vertex<T>*, bool> Graph<T>::addVertex(const Vertex<T> &new_vertex) {
 template <typename T>
 pair<Vertex<T>*, bool> Graph<T>::removeVertex(Vertex<T> &deleted_vertex) {
     //edge case: no such vertex exists in graph
-    if(!containsVertex(deleted_vertex)) { return pair<Vertex<T>*, bool>(deleted_vertex, false); }
+    try { if(!containsVertex(new_vertex)) { throw invalid_argument("Graph does not contain such a vertex!"); } }
+    catch(const invalid_argument &error) {
+        error.what();
+        return pair<Vertex<T>*, bool>(&new_vertex, false);
+    }
 
     //erasing all edges incident to deleted_vertex
     for(Edge<T> &e : edgeNeighborhood(deleted_vertex)) {
@@ -268,10 +276,22 @@ pair<Vertex<T>*, bool> Graph<T>::removeVertex(Vertex<T> &deleted_vertex) {
 template <typename T>
 pair<Edge<T>*, bool> Graph<T>::addEdge(Edge<T> &e) {
     //edge case: one or both endpoints are not vertices in the graph
-    if(!containsVertex(e.first()) || !containsVertex(e.second())) { throw invalid_argument("One or both endpoints are not vertices in this graph."); }
+    try {
+        if(!containsVertex(e.first()) || !containsVertex(e.second())) {
+            throw invalid_argument("One or both endpoints are not vertices in this graph.");
+        }
+    } catch (const invalid_argument &error ) {
+        error.what();
+        return pair<Edge<T>*, bool>(&e, false);
+    }
 
     //edge case: edge is already in graph
-    if(contains(e) && !isMultigraph()) { return pair<Edge<T>*, bool>(&e, false); }
+    try { if(contains(e) && !isMultigraph()) {
+        throw invalid_argument("Edge is duplicate and graph does not allow multiple edges!");
+    } catch (const invalid_argument &error ) {
+        error.what();
+        return pair<Edge<T>*, bool>(&e, false);
+    }
 
     edges.insert(e);
     return pair<Edge<T>*, bool>(&e, true);
@@ -281,10 +301,24 @@ pair<Edge<T>*, bool> Graph<T>::addEdge(Edge<T> &e) {
 template <typename T>
 pair<Edge<T>*, bool> Graph<T>::addEdge(Vertex<T> &v1, Vertex<T> &v2) {
     //edge case: one or both endpoints are not vertices in the graph
-    if(!containsVertex(v1) || !containsVertex(v2)) { throw invalid_argument("One or both endpoints are not vertices in this graph."); }
+    try {
+        if (!containsVertex(v1) || !containsVertex(v2)) {
+            throw invalid_argument("One or both endpoints are not vertices in this graph.");
+        }
+    } catch (const invalid_argument &error ){
+        error.what();
+        return pair<Edge<T>*, bool>(&e, false);
+    }
 
     //edge case: edge already exists in graph
-    if(containsEdge(v1, v2) && !isMultigraph()) { return pair<Edge<T>*, bool>(getEdge(v1, v2), false); }
+    try {
+        if(containsEdge(v1, v2) && !isMultigraph()) {
+            throw invalid_argument("Edge is duplicate and graph does not allow multiple edges!");
+        }
+    } catch (const invalid_argument &error ) {
+        error.what();
+        return pair<Edge<T>*, bool>(getEdge(v1, v2), false);
+    }
 
     edges.insert(new Edge(v1, v2));
     return pair<Edge<T>*, bool>(nullptr, true);
@@ -314,7 +348,11 @@ unordered_set<pair<Edge<T>*, bool>> Graph<T>::addAllEdges(const unordered_set<Ed
 template <typename T>
 pair<Edge<T>*, bool> Graph<T>::removeEdge(const Edge<T> &e) {
     //edge case: edge does not exist in graph
-    if(!containsEdge(e)) { return pair<Edge<T>*, bool>(&e, false); }
+    try { if (!containsEdge(e)) { throw invalid_argument("Graph does not contain such an edge!"); } }
+    catch (const invalid_argument &error ) {
+        error.what();
+        return pair<Edge<T> *, bool>(&e, false);
+    }
 
     e.first().neighbors.erase(e);
     e.second().neighbors.erase(e);
@@ -326,7 +364,11 @@ pair<Edge<T>*, bool> Graph<T>::removeEdge(const Edge<T> &e) {
 template <typename T>
 pair<Edge<T>*, bool> Graph<T>::removeEdge(Vertex<T> &v1, Vertex<T> &v2) {
     //edge case: edge does not exist in graph
-    if(!containsEdge(v1, v2)) { return pair<Edge<T>*, bool>(nullptr, false); }
+    try { if(!containsEdge(v1, v2)) { throw invalid_argument("Graph does not contain such an edge!"); } }
+    catch (const invalid_argument &error ) {
+        error.what();
+        return pair<Edge<T>*, bool>(nullptr, false);
+    }
 
     Edge<T> &e = getEdge(v1, v2);
     e.first().neighbors.erase(e);
@@ -339,7 +381,11 @@ pair<Edge<T>*, bool> Graph<T>::removeEdge(Vertex<T> &v1, Vertex<T> &v2) {
 template <typename T>
 void Graph<T>::setEdgeWeight(Edge<T> &e, double new_weight) {
     //edge case: the graph does not have the Weighted property
-    if(!isWeighted()) { throw logic_error("Graph is not weighted!"); }
+    try { if(!isWeighted()) { throw invalid_argument("Graph is not weighted!"); } }
+    catch (const invalid_argument &error ) {
+        error.what();
+        return pair<Edge<T>*, bool>(nullptr, false);
+    }
 
     //edge case: edge is not in this graph
     if(!containsEdge(e)) { throw out_of_range("Graph does not contain this edge!"); }

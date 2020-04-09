@@ -24,7 +24,12 @@ SimpleGraph<T>::~SimpleGraph() { }
 template <typename T>
 pair<Edge<T>*, bool> SimpleGraph<T>::addEdge(Edge<T> &e) {
     //edge case: graph already contains edge
-    if(containsEdge(e)) { throw invalid_argument("Edge is already present in the graph!"); }
+    try { if (containsEdge(e)) { throw invalid_argument("Edge is already present in the graph!"); } }
+    catch (const invalid_argument &error) {
+        error.what();
+        return pair<Edge<T>*, bool>(&e, false);
+    }
+
     Graph<T>::edges.insert(e);
     return pair<Edge<T>*, bool>(&e, true);
 }
@@ -33,7 +38,13 @@ pair<Edge<T>*, bool> SimpleGraph<T>::addEdge(Edge<T> &e) {
 template <typename T>
 pair<Edge<T>*, bool> SimpleGraph<T>::addEdge(Vertex<T> &v1, Vertex<T> &v2) {
     //edge case: graph already contains edge
-    if(containsEdge(v1, v2)) { throw invalid_argument("Edge is already present in the graph!"); }
+    try { if(containsEdge(v1, v2)) { throw invalid_argument("Edge is already present in the graph!"); } }
+    catch (const invalid_argument &error ) {
+        error.what();
+        return pair<Edge<T>*, bool>(&e, false);
+    }
+
+    if(containsVertex(v1))
     Graph<T>::edges.insert(new Edge(v1, v2));
 }
 
