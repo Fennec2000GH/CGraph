@@ -41,8 +41,9 @@ pair<Edge<T>*, bool> Multigraph<T>::addEdge(Edge<T> &e) {
         return pair<Edge<T>*, bool>(&e, false);
     }
 
-    multi_edges.insert(, )
-    Graph<T>::
+    //adding edge to multigraph edge map
+    bool emplace_success = Multigraph<T>::edges.try_emplace(pair<Vertex<T>&, Vertex<T>&>(e.first(), e.second()), {&e}).second;
+    if(!emplace_success) { Multigraph<T>::edges[pair<Vertex<T>&, Vertex<T>&>(e.first(), e.second())].push_back(e); }
     return pair<Edge<T>*, bool>(&e, true);
 }
 
@@ -63,8 +64,19 @@ pair<Edge<T>*, bool> Multigraph<T>::addEdge(Vertex<T> &v1, Vertex<T> &v2) {
         return pair<Edge<T>*, bool>(nullptr, false);
     }
 
-    if(containsVertex(v1))
-        Graph<T>::edges.insert(new Edge(v1, v2));
+    //edge case: one or both endpoints has filled full capacity
+    try {
+        if(v1.hasCapacity() && getDegree(v1) == v1.getCapacity() ||
+           v2.hasCapacity() && getDegree(v2) == v2.getCapacity())
+        { throw logic_error("Capacity for one or both vertices is already filled!"); }
+    } catch(const logic_error &error ) {
+        error.what();
+        return pair<Edge<T>*, bool>(nullptr, false);
+    }
+
+    Edge<T> *ptr = new Edge(v1, v2);
+    Graph<T>::edges.insert(*ptr);
+    return pair<Edge<T>*, bool>(ptr, true);
 }
 
 /* Appends all new edges to the graph in the range specified by two (2) iterators. The endpoints for each edge must be
@@ -99,4 +111,4 @@ void Multigraph<T>::addProperty(Property new_property) {
 
     Graph<T>::properties.insert(new_property);
 }
-
+int main() { return 0; }

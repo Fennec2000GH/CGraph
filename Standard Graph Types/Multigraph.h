@@ -1,6 +1,8 @@
 
+#pragma once
 #include "../Graph Structures/Graph.h"
 #include <unordered_map>
+#include <vector>
 using namespace std;
 
 #ifndef CGRAPH_MULTIGRAPH_H
@@ -26,11 +28,10 @@ public:
     unordered_set<pair<Edge<T>*, bool>> addAllEdges(const unordered_set<Edge<T>&> edge_set);
     void addProperty(Property new_property);
 
-
 private:
     //MEMBER VARIABLES
-    unordered_map<Edge<T>, unsigned> edges;
-    unordered_set<Property> allowed_properties = {Property::Cycleless, Property::Unmodifiabled, Property::MultipleEdges};
+    unordered_map<pair<Vertex<T>&, Vertex<T>&>, vector<Edge<T>&>> edges;
+    unordered_set<Property> allowed_properties = {Property::Cycleless, Property::Unmodifiable, Property::MultipleEdges};
 
 };
 

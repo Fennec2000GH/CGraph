@@ -101,7 +101,7 @@ private:
     //MEMBER VARIABLES
     string title;
     unordered_set<Vertex<T>&> vertices;
-    unordered_set<Edge<T>&> multi_edges;
+    unordered_set<Edge<T>&> edges;
     unordered_set<Property> properties;
 
 };

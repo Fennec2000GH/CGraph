@@ -58,6 +58,16 @@ pair<Edge<T>*, bool> SimpleGraph<T>::addEdge(Edge<T> &e) {
         return pair<Edge<T>*, bool>(&e, false);
     }
 
+    //edge case: one or both endpoints has filled full capacity
+    try {
+        if(e.first().hasCapacity() && getDegree(e.first()) == e.first().getCapacity() ||
+            e.second().hasCapacity() && getDegree(e.second()) == e.second().getCapacity())
+        { throw logic_error("Capacity for one or both vertices is already filled!"); }
+    } catch(const logic_error &error ) {
+        error.what();
+        return pair<Edge<T> *, bool>(&e, false);
+    }
+
     Graph<T>::edges.insert(e);
     return pair<Edge<T>*, bool>(&e, true);
 }
@@ -79,7 +89,19 @@ pair<Edge<T>*, bool> SimpleGraph<T>::addEdge(Vertex<T> &v1, Vertex<T> &v2) {
         return pair<Edge<T>*, bool>(nullptr, false);
     }
 
-    return Graph<T>::edges.insert(new Edge(v1, v2));
+    //edge case: one or both endpoints has filled full capacity
+    try {
+        if(v1.hasCapacity() && getDegree(v1) == v1.getCapacity() ||
+           v2.hasCapacity() && getDegree(v2) == v2.getCapacity())
+        { throw logic_error("Capacity for one or both vertices is already filled!"); }
+    } catch(const logic_error &error ) {
+        error.what();
+        return pair<Edge<T>*, bool>(nullptr, false);
+    }
+
+    Edge<T> *ptr = new Edge(v1, v2);
+    Graph<T>::edges.insert(*ptr);
+    return pair<Edge<T>*, bool>(ptr, true);
 }
 
 /* Appends all new edges to the graph in the range specified by two (2) iterators. The endpoints for each edge must be

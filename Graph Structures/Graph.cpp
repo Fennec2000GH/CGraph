@@ -74,7 +74,9 @@ size_t Graph<T>::edgeCount() const { return Graph<T>::edges.size(); }
 
 /* Gets the number of edges incident with a vertex, regardless of edge type.*/
 template <typename T>
-size_t Graph<T>::getDegree(const Vertex<T> &v) const { return v.degree(); }
+size_t Graph<T>::getDegree(const Vertex<T> &v) const {
+    return count_if(cebegin(), ceend(), [&v](const Edge<T> &e) { return e.first() == v || e.second() == v; } );
+}
 
 /* Check for the existence of a given vertex in the graph. */
 template <typename T>

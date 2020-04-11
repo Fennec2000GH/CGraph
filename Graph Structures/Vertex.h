@@ -36,8 +36,7 @@ public:
     int getID() const;
     bool isMarked() const;
     bool hasCapacity() const;
-    unsigned getCapacity() const;
-    size_t getDegree() const;
+    int getCapacity() const;
     bool equals(const Vertex<T> &other_vertex) const;
 
 private:

@@ -40,7 +40,12 @@ bool Vertex<T>::hasCapacity() const { return capacity.has_value(); }
 
 /* Gets the capacity, if exists */
 template <typename T>
-unsigned Vertex<T>::getCapacity() const { return capacity.value_or(numeric_limits<unsigned>::infinity);  }
+int Vertex<T>::getCapacity() const {
+    //edge case: capacity is not enforced
+    try { if(!hasCapacity()) { throw logic_error("Capacity is not enforced!"); } }
+    catch (const logic_error &error) { error.what(); }
+    return capacity.value_or(-1);
+}
 
 //MUTATORS
 /* Sets new value for boolean marker */

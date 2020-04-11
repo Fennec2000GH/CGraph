@@ -28,27 +28,38 @@ SimpleWeightedGraph<T>::~SimpleWeightedGraph() { }
 template <typename T>
 pair<Edge<T>*, bool> SimpleWeightedGraph<T>::addEdge(Edge<T> &e) {
     //edge case: graph already contains edge
-    try { if (containsEdge(e)) { throw invalid_argument("Edge is already present in the graph!"); } }
+    try { if (containsEdge(e)) { throw invalid_argument("Edge is already present in the graph!"); }}
     catch (const invalid_argument &error) {
         error.what();
-        return pair<Edge<T>*, bool>(&e, false);
+        return pair<Edge<T> *, bool>(&e, false);
     }
 
     //edge case: edge is directed
-    try { if(e.isDirected()) { throw invalid_argument("Edge cannot be directed!"); } }
-    catch (const invalid_argument &error ) {
+    try { if (e.isDirected()) { throw invalid_argument("Edge cannot be directed!"); }}
+    catch (const invalid_argument &error) {
         error.what();
-        return pair<Edge<T>*, bool>(&e, false);
+        return pair<Edge<T> *, bool>(&e, false);
     }
 
     //edge case: one or both endpoints are not vertices in the graph
     try {
-        if(!containsVertex(e.first()) || !containsVertex(e.second())) {
+        if (!containsVertex(e.first()) || !containsVertex(e.second())) {
             throw invalid_argument("One or both vertices are not in graph!");
         }
-    } catch (const invalid_argument &error ) {
+    } catch (const invalid_argument &error) {
         error.what();
-        return pair<Edge<T>*, bool>(&e, false);
+        return pair<Edge<T> *, bool>(&e, false);
+    }
+
+    //edge case: one or both endpoints has filled full capacity
+    try {
+        if (e.first().hasCapacity() && getDegree(e.first()) == e.first().getCapacity() ||
+            e.second().hasCapacity() && getDegree(e.second()) == e.second().getCapacity()) {
+            throw logic_error("Capacity for one or both vertices is already filled!");
+        }
+    } catch (const logic_error &error) {
+        error.what();
+        return pair<Edge<T> *, bool>(&e, false);
     }
 
     Graph<T>::edges.insert(e);
@@ -72,7 +83,19 @@ pair<Edge<T>*, bool> SimpleWeightedGraph<T>::addEdge(Vertex<T> &v1, Vertex<T> &v
         return pair<Edge<T>*, bool>(nullptr, false);
     }
 
-    return pair<Edge<T>*, bool>(*Graph<T>::edges.insert(new Edge(v1, v2)), true);
+    //edge case: one or both endpoints has filled full capacity
+    try {
+        if(v1.hasCapacity() && getDegree(v1) == v1.getCapacity() ||
+           v2.hasCapacity() && getDegree(v2) == v2.getCapacity())
+        { throw logic_error("Capacity for one or both vertices is already filled!"); }
+    } catch(const logic_error &error ) {
+        error.what();
+        return pair<Edge<T>*, bool>(nullptr, false);
+    }
+
+    Edge<T> *ptr = new Edge(v1, v2);
+    Graph<T>::edges.insert(*ptr);
+    return pair<Edge<T>*, bool>(ptr, true);
 }
 
 /* Appends all new edges to the graph in the range specified by two (2) iterators. The endpoints for each edge must be
