@@ -25,6 +25,35 @@ Vertex<T>::Vertex(const Vertex<T> &other_vertex): marker(other_vertex.marker), c
 template <typename T>
 Vertex<T>::~Vertex() { }
 
+//OPERATOR OVERLOADING
+template <typename T>
+bool Vertex<T>::operator == (const Vertex<T> &v) {
+    return (this -> val == v.val) &&
+    (this -> id == v.id) &&
+    (this -> marker == v.marker) &&
+    (this -> capacity == v.capacity);
+}
+
+template <typename T>
+bool Vertex<T>::operator != (const Vertex<T> &v) {
+    return (this -> val != v.val) ||
+           (this -> id != v.id) ||
+           (this -> marker != v.marker) ||
+           (this -> capacity != v.capacity);
+}
+
+template <typename T>
+bool Vertex<T>::operator >= (const Vertex<T> &v) { return this -> val >= v.val; }
+
+template <typename T>
+bool Vertex<T>::operator <= (const Vertex<T> &v) { return this -> val <= v.val; }
+
+template <typename T>
+bool Vertex<T>::operator < (const Vertex<T> &v) { return this -> val < v.val; }
+
+template <typename T>
+bool Vertex<T>::operator > (const Vertex<T> &v) { return this -> val > v.val; }
+
 //ACCESSORS
 /* Gets the ID */
 template <typename T>

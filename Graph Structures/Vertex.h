@@ -32,6 +32,14 @@ public:
    //DESTRUCTORS
    ~Vertex();
 
+    //OPERATOR OVERLOADING
+    bool operator == (const Vertex<T> &v);
+    bool operator != (const Vertex<T> &v);
+    bool operator <= (const Vertex<T> &v);
+    bool operator >= (const Vertex<T> &v);
+    bool operator < (const Vertex<T> &v);
+    bool operator > (const Vertex<T> &v);
+
     //ACCESSORS
     int getID() const;
     bool isMarked() const;
