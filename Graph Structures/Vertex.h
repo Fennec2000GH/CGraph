@@ -33,12 +33,12 @@ public:
    ~Vertex();
 
     //OPERATOR OVERLOADING
-    bool operator == (const Vertex<T> &v);
-    bool operator != (const Vertex<T> &v);
-    bool operator <= (const Vertex<T> &v);
-    bool operator >= (const Vertex<T> &v);
-    bool operator < (const Vertex<T> &v);
-    bool operator > (const Vertex<T> &v);
+    bool operator == (const Vertex<T> &v) const;
+    bool operator != (const Vertex<T> &v) const;
+    bool operator <= (const Vertex<T> &v) const;
+    bool operator >= (const Vertex<T> &v) const;
+    bool operator < (const Vertex<T> &v) const;
+    bool operator > (const Vertex<T> &v) const;
 
     //ACCESSORS
     int getID() const;

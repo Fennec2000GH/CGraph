@@ -1,7 +1,11 @@
 
 #pragma once
+#include <algorithm>
 #include <iostream>
+#include <numeric>
 #include <string>
+#include <unordered_map>
+#include <unordered_set>
 using namespace std;
 
 #ifndef CGRAPH_PSEUDOGRAPH_H
@@ -20,7 +24,7 @@ public:
 
     //ACCESSORS
     unsigned getDegree(const Vertex<T> &v) const;
-    unsigned getSelfLoopDensity() const;
+    double getSelfLoopDensity() const;
     bool hasSelfLoop(const Vertex<T> &v) const;
 
     //MUTATORS
@@ -32,7 +36,9 @@ public:
 
 private:
     //MEMBER VARIABLES
+    unordered_map<Vertex<T>&, unsigned> self_loop_edges; /* also present in Multigraph<T>::edges */
     unordered_set<Property> allowed_properties = {Property::Cycleless, Property::Unmodifiable, Property::SelfLoop, Property::MultipleEdges};
+
 };
 
 

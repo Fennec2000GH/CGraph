@@ -27,7 +27,7 @@ Vertex<T>::~Vertex() { }
 
 //OPERATOR OVERLOADING
 template <typename T>
-bool Vertex<T>::operator == (const Vertex<T> &v) {
+bool Vertex<T>::operator == (const Vertex<T> &v) const {
     return (this -> val == v.val) &&
     (this -> id == v.id) &&
     (this -> marker == v.marker) &&
@@ -35,7 +35,7 @@ bool Vertex<T>::operator == (const Vertex<T> &v) {
 }
 
 template <typename T>
-bool Vertex<T>::operator != (const Vertex<T> &v) {
+bool Vertex<T>::operator != (const Vertex<T> &v) const {
     return (this -> val != v.val) ||
            (this -> id != v.id) ||
            (this -> marker != v.marker) ||
@@ -43,16 +43,16 @@ bool Vertex<T>::operator != (const Vertex<T> &v) {
 }
 
 template <typename T>
-bool Vertex<T>::operator >= (const Vertex<T> &v) { return this -> val >= v.val; }
+bool Vertex<T>::operator >= (const Vertex<T> &v) const { return this -> val >= v.val; }
 
 template <typename T>
-bool Vertex<T>::operator <= (const Vertex<T> &v) { return this -> val <= v.val; }
+bool Vertex<T>::operator <= (const Vertex<T> &v) const { return this -> val <= v.val; }
 
 template <typename T>
-bool Vertex<T>::operator < (const Vertex<T> &v) { return this -> val < v.val; }
+bool Vertex<T>::operator < (const Vertex<T> &v) const { return this -> val < v.val; }
 
 template <typename T>
-bool Vertex<T>::operator > (const Vertex<T> &v) { return this -> val > v.val; }
+bool Vertex<T>::operator > (const Vertex<T> &v) const { return this -> val > v.val; }
 
 //ACCESSORS
 /* Gets the ID */
