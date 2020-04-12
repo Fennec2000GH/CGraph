@@ -24,7 +24,7 @@ Multigraph<T>::~Multigraph() { }
 //ACCESSORS
 /* Count the number of times an edge exists between the same two (2) endpoints, given an edge */
 template <typename T>
-size_t Multigraph<T>::getEdgeDuplicity(const Edge<T> &e) const {
+unsigned Multigraph<T>::getEdgeDuplicity(const Edge<T> &e) const {
     //edge case: graph does not contain edge
     try { if (!containsEdge(e)) { throw invalid_argument("Edge is not in graph!"); } }
     catch (const invalid_argument &error) {
@@ -37,7 +37,7 @@ size_t Multigraph<T>::getEdgeDuplicity(const Edge<T> &e) const {
 
 /* Count the number of times an edge exists between the same two (2) endpoints, given the endpoints */
 template <typename T>
-size_t Multigraph<T>::getEdgeDuplicity(const Vertex<T> &v1, const Vertex<T> &v2) const {
+unsigned Multigraph<T>::getEdgeDuplicity(const Vertex<T> &v1, const Vertex<T> &v2) const {
     //edge case: one or both vertices are not in graph
     try { if(!containsVertex(v1) || !containsVertex(v2)) { throw invalid_argument("One or both vertices are not in graph!"); } }
     catch (const invalid_argument &error ) {
@@ -52,7 +52,7 @@ size_t Multigraph<T>::getEdgeDuplicity(const Vertex<T> &v1, const Vertex<T> &v2)
 
 /* Get the degree of a vertex as if each set of duplicate edges is flattened into a single edge */
 template <typename T>
-size_t Multigraph<T>::getUniqueDegree(const Vertex<T> &v) const {
+unsigned Multigraph<T>::getUniqueDegree(const Vertex<T> &v) const {
     return count_if(Graph<T>::cebegin(), Graph<T>::ceend(), [&v] (const Edge<T> &e) { return e.first() == v || e.second() == v; } );
 }
 

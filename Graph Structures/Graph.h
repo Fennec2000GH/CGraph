@@ -59,9 +59,9 @@ public:
 
     //ACCESSORS
     string getTitle() const;
-    size_t vertexCount() const;
-    size_t edgeCount() const;
-    size_t getDegree(const Vertex<T> &v) const;
+    unsigned vertexCount() const;
+    unsigned edgeCount() const;
+    unsigned getDegree(const Vertex<T> &v) const;
     bool containsVertex(const Vertex<T> &v) const;
     bool containsEdge(const Edge<T> &e) const;
     bool containsMatchingEdge(const Edge<T> &e) const;

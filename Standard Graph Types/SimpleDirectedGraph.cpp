@@ -27,11 +27,11 @@ SimpleDirectedGraph<T>::~SimpleDirectedGraph() { }
  * edges are not considered.
  */
 template <typename T>
-size_t SimpleDirectedGraph<T>::netDegree(const Vertex<T> &v) const { return outDegree(v) - inDegree(v); }
+unsigned SimpleDirectedGraph<T>::netDegree(const Vertex<T> &v) const { return outDegree(v) - inDegree(v); }
 
 /* Gets the number of incoming edges at a vertex. For mixed graphs, undirected edges are not considered. */
 template <typename T>
-size_t SimpleDirectedGraph<T>::inDegree(const Vertex<T> &v) const {
+unsigned SimpleDirectedGraph<T>::inDegree(const Vertex<T> &v) const {
     try { if(!containsVertex(v)) { throw invalid_argument("Vertex is not in graph!"); } }
     catch (const invalid_argument &error ) {
         error.what();
@@ -43,7 +43,7 @@ size_t SimpleDirectedGraph<T>::inDegree(const Vertex<T> &v) const {
 
 /* Gets the number of outgoing edges at a vertex. For mixed graphs, undirected edges are not considered. */
 template <typename T>
-size_t SimpleDirectedGraph<T>::outDegree(const Vertex<T> &v) const {
+unsigned SimpleDirectedGraph<T>::outDegree(const Vertex<T> &v) const {
     try { if(!containsVertex(v)) { throw invalid_argument("Vertex is not in graph!"); } }
     catch (const invalid_argument &error ) {
         error.what();

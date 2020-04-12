@@ -29,13 +29,21 @@ public:
     //DESTRUCTORS
     ~Edge();
 
+    //OPERATOR OVERLOADING
+    bool operator == (const Edge<T> &e) const;
+    bool operator != (const Edge<T> &e) const;
+    bool operator <= (const Edge<T> &e) const;
+    bool operator >= (const Edge<T> &e) const;
+    bool operator < (const Edge<T> &e) const;
+    bool operator > (const Edge<T> &e) const;
+
     //ACCESSORS
     Vertex<T>& first() const;
     Vertex<T>& second() const;
     bool isDirected() const;
     bool isWeighted() const;
     double getWeight() const;
-    bool equals(const Edge<T> &other_edge) const;
+    bool isSelfLoop() const;
 
 private:
     //MUTATORS

@@ -32,6 +32,57 @@ Edge<T>::Edge(const Edge<T> &other_edge): v1(new Vertex(other_edge.v1)), v2(new 
 template <typename T>
 Edge<T>::~Edge() { }
 
+//OPERATOR OVERLOADING
+template <typename T>
+bool Edge<T>::operator == (const Edge<T> &e) const {
+    //base case: same exact reference
+    if(&this == &e) { return true; }
+    return (this -> v1 == e.v1) &&
+           (this -> v2 == e.v2) &&
+           (this -> directed == e.directed) &&
+           !(this -> weight.has_value() ^ e.weight.has_value()) &&
+           (this -> weight.value_or(-1) == e.weight.value_or(-1));
+}
+
+template <typename T>
+bool Edge<T>::operator != (const Edge<T> &e) const {
+    return (this -> v1 != e.v1) ||
+           (this -> v2 != e.v2) ||
+           (this -> directed != e.directed) ||
+           (this -> weight.has_value() ^ e.weight.has_value()) ||
+           (this -> weight.value_or(-1) != e.weight.value_or(-1));
+}
+
+template <typename T>
+bool Edge<T>::operator <= (const Edge<T> &e) const {
+    //definite false cases
+    if(this -> weight.has_value() && !e.weight.has_value()) { return false; }
+    return !(this -> weight.has_value()) || (this -> weight.value() <= e.weight.value());
+}
+
+template <typename T>
+bool Edge<T>::operator >= (const Edge<T> &e) const {
+    //definite false cases
+    if(!(this -> weight.has_value()) && e.weight.has_value()) { return false; }
+    return (!e.weight.has_value()) || (this -> weight.value() >= e.weight.value());
+}
+
+template <typename T>
+bool Edge<T>::operator < (const Edge<T> &e) const {
+    //definite false cases
+    if(this -> weight.has_value() && !e.weight.has_value()) { return false; }
+    if(!(this -> weight.has_value() || e.weight.has_value())) { return false; }
+    return (!(this -> weight.has_value()) && e.weight.has_value()) || (this -> weight.value() < e.weight.value());
+}
+
+template <typename T>
+bool Edge<T>::operator > (const Edge<T> &e) const {
+    //definite false cases
+    if(!(this -> weight.has_value()) && e.weight.has_value()) { return false; }
+    if(!(this -> weight.has_value() || e.weight.has_value())) { return false; }
+    return (this -> weight.has_value() && !e.weight.has_value()) || (this -> weight.value() > e.weight.value());
+}
+
 //ACCESSORS
 /* Accesses the first endpoint */
 template <typename T>
@@ -56,16 +107,9 @@ double Edge<T>::getWeight() const {
     return weight.value();
 }
 
-/* Checks whether this edge equals to another edge by containing the same values for each field */
+/* Checks whether edge is a self-loop */
 template <typename T>
-bool Edge<T>::equals(const Edge<T> &other_edge) const {
-    //base case: same exact reference
-    if(this == other_edge) { return true; }
-    return (this -> first() == other_edge.first) &&
-    (this -> second() == other_edge.second()) &&
-    (this -> directed == other_edge.directed) &&
-    (this -> weight == other_edge.weight);
-}
+bool Edge<T>::isSelfLoop() const { return &v1 == &v2; }
 
 //MUTATORS
 /* Sets a new vertex to be the first endpoint. The old vertex loses the edge */

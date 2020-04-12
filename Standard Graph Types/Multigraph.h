@@ -20,9 +20,9 @@ public:
     ~Multigraph();
 
     //ACCESSORS
-    size_t getEdgeDuplicity(const Edge<T> &e) const;
-    size_t getEdgeDuplicity(const Vertex<T> &v1, const Vertex<T> &v2) const;
-    size_t getUniqueDegree(const Vertex<T> &v) const;
+    unsigned getEdgeDuplicity(const Edge<T> &e) const;
+    unsigned getEdgeDuplicity(const Vertex<T> &v1, const Vertex<T> &v2) const;
+    unsigned getUniqueDegree(const Vertex<T> &v) const;
 
     //MUTATORS
     pair<Edge<T>*, bool> addEdge(Edge<T> &e);

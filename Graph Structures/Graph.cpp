@@ -66,15 +66,15 @@ string Graph<T>::getTitle() const { return title; }
 
 /* Gets the number of vertices in the graph. */
 template <typename T>
-size_t Graph<T>::vertexCount() const { return vertices.size(); }
+unsigned Graph<T>::vertexCount() const { return vertices.size(); }
 
 /* Gets the number of edges in the graph. */
 template <typename T>
-size_t Graph<T>::edgeCount() const { return Graph<T>::edges.size(); }
+unsigned Graph<T>::edgeCount() const { return Graph<T>::edges.size(); }
 
 /* Gets the number of edges incident with a vertex, regardless of edge type.*/
 template <typename T>
-size_t Graph<T>::getDegree(const Vertex<T> &v) const {
+unsigned Graph<T>::getDegree(const Vertex<T> &v) const {
     return count_if(cebegin(), ceend(), [&v](const Edge<T> &e) { return e.first() == v || e.second() == v; } );
 }
 

@@ -16,10 +16,8 @@ public:
     SimpleGraph(const SimpleGraph<T> &other_graph);
 
     //DESTRUCTORS
-    ~SimpleGraph();
 
     //ACCESSORS
-
 
     //MUTATORS
     pair<Edge<T>*, bool> addEdge(Edge<T> &e);
